@@ -551,10 +551,7 @@
                     const teamData = await response.json();
                     
                     // Also get team's current season statistics
-                    // European football seasons run Aug-May, so 2024/25 season = 2024
-                    const currentYear = new Date().getFullYear();
-                    const currentMonth = new Date().getMonth() + 1; // 1-12
-                    const currentSeason = season || (currentMonth >= 8 ? currentYear : currentYear - 1);
+                    const currentSeason = new Date().getFullYear();
                     const statsResponse = await fetch(`/api/teams/${team.id}/matches?season=${currentSeason}`, {
                         method: 'GET',
                         headers: {
