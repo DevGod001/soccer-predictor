@@ -354,47 +354,22 @@
             
             async loadTeamsDatabase() {
                 try {
-                    this.showLoading('Loading all available competitions and teams...');
+                    // Load teams from major competitions via API
+                    const majorCompetitions = [2021, 2014, 2019, 2002, 2015]; // PL, La Liga, Serie A, Bundesliga, Ligue 1
                     
-                    // First, get ALL competitions from the API
-                    const competitionsResponse = await fetch('/api/competitions/all', {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    });
+                    this.showLoading('Loading teams database from API...');
                     
-                    if (!competitionsResponse.ok) {
-                        throw new Error(`Failed to load competitions: ${competitionsResponse.status}`);
-                    }
-                    
-                    const competitionsData = await competitionsResponse.json();
-                    const allCompetitions = competitionsData.competitions || [];
-                    
-                    console.log(`Found ${allCompetitions.length} total competitions`);
-                    
-                    // Load teams from ALL competitions (with rate limiting)
-                    let loadedCount = 0;
-                    for (const competition of allCompetitions) {
-                        try {
-                            await this.loadTeamsFromCompetition(competition.id);
-                            loadedCount++;
-                            this.showLoading(`Loading teams... ${loadedCount}/${allCompetitions.length} competitions processed`);
-                            
-                            // Rate limiting: wait between requests
-                            await new Promise(resolve => setTimeout(resolve, 100));
-                            
-                        } catch (error) {
-                            console.warn(`Failed to load teams from ${competition.name}:`, error.message);
-                            // Continue with other competitions even if one fails
-                        }
+                    for (const compId of majorCompetitions) {
+                        await this.loadTeamsFromCompetition(compId);
+                        // Small delay to respect rate limits
+                        await new Promise(resolve => setTimeout(resolve, 200));
                     }
                     
                     if (this.teams.size === 0) {
                         throw new Error('No teams loaded from API. Check your connection and API key.');
                     }
                     
-                    console.log(`Successfully loaded ${this.teams.size} teams from ${loadedCount} competitions`);
+                    console.log(`Successfully loaded ${this.teams.size} teams from API`);
                     document.getElementById('loadingSection').innerHTML = '';
                     
                 } catch (error) {
@@ -575,8 +550,9 @@
                     
                     const teamData = await response.json();
                     
-                    // Also get team's 2024 season match statistics
-                    const statsResponse = await fetch(`/api/teams/${team.id}/matches?season=2024`, {
+                    // Also get team's current season statistics
+                    const currentSeason = new Date().getFullYear();
+                    const statsResponse = await fetch(`/api/teams/${team.id}/matches?season=${currentSeason}`, {
                         method: 'GET',
                         headers: {
                             'Accept': 'application/json'
