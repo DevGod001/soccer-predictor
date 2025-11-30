@@ -1,5 +1,18 @@
 const FOOTBALL_API_BASE = 'https://api.football-data.org/v4';
-const COMPETITIONS = ['PL', 'SA', 'BL1', 'PD', 'FL1']; // Premier League, La Liga, Bundesliga, Serie A, Ligue 1
+const COMPETITIONS = [
+  'PL',   // Premier League
+  'PD',   // La Liga
+  'SA',   // Serie A
+  'BL1',  // Bundesliga
+  'FL1',  // Ligue 1
+  'CL',   // Champions League
+  'ELC',  // Championship
+  'DED',  // Eredivisie
+  'PPL',  // Primeira Liga
+  'BSA',  // Série A (Brazil)
+  'EC',   // European Championship
+  'WC'    // FIFA World Cup
+];
 
 // In-memory cache (will reset on serverless function cold start, which is fine for temporary caching)
 let teamsCache = null;
