@@ -1947,9 +1947,10 @@
         
         async function loadTeams() {
             try {
-                const response = await fetch('/api/competitions/2021/teams');
+                // Fetch all teams from all 5 competitions (PL, La Liga, Serie A, Bundesliga, Ligue 1)
+                const response = await fetch('/api/teams/search');
                 const data = await response.json();
-                if (data.teams) {
+                if (data.success && data.teams) {
                     allTeams = data.teams.map(t => ({ id: t.id, name: t.name }));
                 }
             } catch (error) {
