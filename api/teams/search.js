@@ -8,8 +8,8 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Helper: Fetch from Football-Data API
 async function fetchFootballData(endpoint) {
-  const apiKey = process.env.FOOTBALL_DATA_API_KEY;
-  if (!apiKey) throw new Error('Missing FOOTBALL_DATA_API_KEY');
+  const apiKey = process.env.FOOTBALL_API_KEY;
+  if (!apiKey) throw new Error('Missing FOOTBALL_API_KEY');
   
   const response = await fetch(`${FOOTBALL_API_BASE}${endpoint}`, {
     headers: { 'X-Auth-Token': apiKey }
