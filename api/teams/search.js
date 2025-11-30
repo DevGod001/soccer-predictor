@@ -1,21 +1,7 @@
 const FOOTBALL_API_BASE = 'https://api.football-data.org/v4';
-const COMPETITIONS = [
-  'PL',   // Premier League
-  'PD',   // La Liga
-  'SA',   // Serie A
-  'BL1',  // Bundesliga
-  'FL1',  // Ligue 1
-  'CL',   // Champions League
-  'ELC',  // Championship
-  'DED',  // Eredivisie
-  'PPL',  // Primeira Liga
-  'BSA',  // Série A (Brazil)
-  'EC',   // European Championship
-  'WC'    // FIFA World Cup
-];
 
 // In-memory cache (will reset on serverless function cold start, which is fine for temporary caching)
-const CACHE_VERSION = 'v2'; // Increment this to invalidate old cache
+const CACHE_VERSION = 'v3'; // Increment this to invalidate old cache
 let teamsCache = null;
 let cacheTimestamp = null;
 let cacheVersion = null;
@@ -58,24 +44,39 @@ export default async function handler(req, res) {
     let allTeams = teamsCache;
     
     if (!isCacheValid) {
-      // Fetch teams from all competitions
+      // Fetch available competitions from API
       allTeams = [];
       
-      for (const competitionCode of COMPETITIONS) {
-        try {
-          const teams = await fetchFootballData(`/competitions/${competitionCode}/teams`);
-          if (teams.teams && Array.isArray(teams.teams)) {
-            const competitionTeams = teams.teams.map(team => ({
-              id: team.id,
-              name: team.name,
-              competition: competitionCode,
-              crest: team.crest || ''
-            }));
-            allTeams = allTeams.concat(competitionTeams);
+      try {
+        const competitionsData = await fetchFootballData('/competitions');
+        const competitions = competitionsData.competitions || [];
+        
+        // Filter to only free-tier competitions (plan: "TIER_ONE")
+        const freeCompetitions = competitions.filter(comp => comp.plan === 'TIER_ONE');
+        
+        console.log(`Found ${freeCompetitions.length} free competitions`);
+        
+        // Fetch teams from each competition
+        for (const competition of freeCompetitions) {
+          try {
+            const teams = await fetchFootballData(`/competitions/${competition.id}/teams`);
+            if (teams.teams && Array.isArray(teams.teams)) {
+              const competitionTeams = teams.teams.map(team => ({
+                id: team.id,
+                name: team.name,
+                competition: competition.code,
+                competitionName: competition.name,
+                crest: team.crest || ''
+              }));
+              allTeams = allTeams.concat(competitionTeams);
+            }
+          } catch (error) {
+            console.warn(`Warning: Could not fetch teams for ${competition.name}:`, error.message);
           }
-        } catch (error) {
-          console.warn(`Warning: Could not fetch teams for ${competitionCode}:`, error.message);
         }
+      } catch (error) {
+        console.error('Failed to fetch competitions:', error);
+        throw new Error('Failed to load competitions from API');
       }
       
       // Remove duplicates (some teams might appear in multiple sources)
