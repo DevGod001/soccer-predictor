@@ -15,8 +15,10 @@ const COMPETITIONS = [
 ];
 
 // In-memory cache (will reset on serverless function cold start, which is fine for temporary caching)
+const CACHE_VERSION = 'v2'; // Increment this to invalidate old cache
 let teamsCache = null;
 let cacheTimestamp = null;
+let cacheVersion = null;
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Helper: Fetch from Football-Data API
@@ -46,9 +48,12 @@ export default async function handler(req, res) {
     const { search = '' } = req.query;
     const searchLower = search.toLowerCase();
     
-    // Check in-memory cache
+    // Check in-memory cache (invalidate if version changed)
     const now = Date.now();
-    const isCacheValid = teamsCache && cacheTimestamp && (now - cacheTimestamp < CACHE_DURATION);
+    const isCacheValid = teamsCache && 
+                         cacheTimestamp && 
+                         cacheVersion === CACHE_VERSION &&
+                         (now - cacheTimestamp < CACHE_DURATION);
     
     let allTeams = teamsCache;
     
@@ -88,6 +93,7 @@ export default async function handler(req, res) {
       // Update in-memory cache
       teamsCache = allTeams;
       cacheTimestamp = now;
+      cacheVersion = CACHE_VERSION;
     }
     
     // Filter by search query
