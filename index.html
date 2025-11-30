@@ -1947,10 +1947,10 @@
         
         async function loadTeams() {
             try {
-                const response = await fetch('/api/competitions/2021/teams');
+                const response = await fetch('/api/teams/search');
                 const data = await response.json();
-                if (data.teams) {
-                    allTeams = data.teams.map(t => ({ id: t.id, name: t.name }));
+                if (data.success && data.teams) {
+                    allTeams = data.teams.map(t => ({ id: t.id, name: t.name, competition: t.competition }));
                 }
             } catch (error) {
                 console.error('Failed to load teams:', error);
