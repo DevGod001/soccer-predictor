@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Tables - Soccer Predictor</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: end;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .standings-table th,
+        .standings-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .standings-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .standings-table td:first-child,
+        .standings-table th:first-child {
+            text-align: center;
+            width: 50px;
+        }
+        
+        .standings-table td:nth-child(2),
+        .standings-table th:nth-child(2) {
+            text-align: left;
+            min-width: 200px;
+        }
+        
+        .standings-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .position {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .team-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .team-crest {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+        
+        .champions-league {
+            background: linear-gradient(90deg, #e3f2fd, transparent);
+            border-left: 4px solid #2196f3;
+        }
+        
+        .europa-league {
+            background: linear-gradient(90deg, #fff3e0, transparent);
+            border-left: 4px solid #ff9800;
+        }
+        
+        .relegation {
+            background: linear-gradient(90deg, #ffebee, transparent);
+            border-left: 4px solid #f44336;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 18px;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            
+            .standings-table {
+                font-size: 14px;
+            }
+            
+            .standings-table th,
+            .standings-table td {
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">← Back to Main</a>
+            <h1>📋 League Tables</h1>
+            <p>View current standings for all competitions</p>
+        </div>
+        
+        <div class="panel">
+            <div class="controls">
+                <div class="form-group">
+                    <label for="competition">Select Competition</label>
+                    <select id="competition">
+                        <option value="2021">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+                        <option value="2014">🇪🇸 La Liga</option>
+                        <option value="2019">🇮🇹 Serie A</option>
+                        <option value="2002">🇩🇪 Bundesliga</option>
+                        <option value="2015">🇫🇷 Ligue 1</option>
+                        <option value="2016">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
+                        <option value="2003">🇳🇱 Eredivisie</option>
+                        <option value="2017">🇵🇹 Primeira Liga</option>
+                        <option value="2013">🇧🇷 Série A</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="loadStandings()">🔍 Load Table</button>
+            </div>
+            
+            <div id="loading" style="display: none;"></div>
+            <div id="error" style="display: none;"></div>
+            <div id="standingsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-load standings on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStandings();
+        });
+        
+        async function loadStandings() {
+            const competitionId = document.getElementById('competition').value;
+            
+            showLoading('Loading league table...');
+            hideError();
+            document.getElementById('standingsContainer').innerHTML = '';
+            
+            try {
+                const response = await fetch(`/api/competitions/${competitionId}/standings`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch standings');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.standings || data.standings.length === 0) {
+                    showError('No standings data available for this competition');
+                    hideLoading();
+                    return;
+                }
+                
+                displayStandings(data);
+                hideLoading();
+                
+            } catch (error) {
+                hideLoading();
+                showError(`Failed to load standings: ${error.message}`);
+            }
+        }
+        
+        function displayStandings(data) {
+            const container = document.getElementById('standingsContainer');
+            const standings = data.standings[0].table;
+            const competition = data.competition;
+            
+            let tableHTML = `
+                <h2 style="margin-bottom: 20px; color: #333;">${competition.name} - ${data.season.startDate.substring(0,4)}/${data.season.endDate.substring(0,4)}</h2>
+                <table class="standings-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Team</th>
+                            <th>P</th>
+                            <th>W</th>
+                            <th>D</th>
+                            <th>L</th>
+                            <th>GF</th>
+                            <th>GA</th>
+                            <th>GD</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            standings.forEach(team => {
+                let rowClass = '';
+                
+                // Determine qualification zones (general rules)
+                if (team.position <= 4) {
+                    rowClass = 'champions-league';
+                } else if (team.position <= 6) {
+                    rowClass = 'europa-league';
+                } else if (team.position >= standings.length - 2) {
+                    rowClass = 'relegation';
+                }
+                
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td class="position">${team.position}</td>
+                        <td>
+                            <div class="team-name">
+                                <img src="${team.team.crest}" alt="${team.team.name}" class="team-crest" onerror="this.style.display='none'">
+                                <span>${team.team.name}</span>
+                            </div>
+                        </td>
+                        <td>${team.playedGames}</td>
+                        <td>${team.won}</td>
+                        <td>${team.draw}</td>
+                        <td>${team.lost}</td>
+                        <td>${team.goalsFor}</td>
+                        <td>${team.goalsAgainst}</td>
+                        <td style="font-weight: bold; color: ${team.goalDifference >= 0 ? '#28a745' : '#dc3545'}">
+                            ${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}
+                        </td>
+                        <td style="font-weight: bold; font-size: 16px;">${team.points}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: linear-gradient(90deg, #e3f2fd, transparent); border-left: 4px solid #2196f3;"></div>
+                        <span>Champions League</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: linear-gradient(90deg, #fff3e0, transparent); border-left: 4px solid #ff9800;"></div>
+                        <span>Europa League</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: linear-gradient(90deg, #ffebee, transparent); border-left: 4px solid #f44336;"></div>
+                        <span>Relegation</span>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+        
+        function showLoading(message) {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.innerHTML = `<div class="loading">${message}</div>`;
+            loadingDiv.style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = `<div class="error">${message}</div>`;
+            errorDiv.style.display = 'block';
+        }
+        
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

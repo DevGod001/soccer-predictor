@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VVIP Auto-Analysis - Soccer Predictor</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #000;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.3);
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 20px auto 0;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .results-table th {
+            background: linear-gradient(45deg, #ffd700, #ffa500);
+            color: #000;
+            font-weight: 600;
+        }
+        
+        .results-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .win-prob {
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .confidence {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #ffa500;
+            font-size: 18px;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.1);
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">← Back to Main</a>
+            <h1>⭐ VVIP Auto-Analysis</h1>
+            <p>Automatically find all high-confidence winning predictions</p>
+        </div>
+        
+        <div class="panel">
+            <div class="form-group">
+                <label for="matchDate">Select Date</label>
+                <input type="date" id="matchDate" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="competition">Select Competition</label>
+                <select id="competition">
+                    <option value="2021">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+                    <option value="2014">🇪🇸 La Liga</option>
+                    <option value="2019">🇮🇹 Serie A</option>
+                    <option value="2002">🇩🇪 Bundesliga</option>
+                    <option value="2015">🇫🇷 Ligue 1</option>
+                    <option value="2001">⭐ Champions League</option>
+                    <option value="2016">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
+                    <option value="2003">🇳🇱 Eredivisie</option>
+                    <option value="2017">🇵🇹 Primeira Liga</option>
+                    <option value="2013">🇧🇷 Série A</option>
+                    <option value="2018">🏆 European Championship</option>
+                    <option value="2000">🌍 FIFA World Cup</option>
+                </select>
+            </div>
+            
+            <button class="btn" onclick="analyzeMatches()">🔍 Analyze Matches</button>
+            
+            <div id="loading" style="display: none;"></div>
+            <div id="error" style="display: none;"></div>
+            <div id="results" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Set default date to today
+        document.getElementById('matchDate').valueAsDate = new Date();
+        
+        async function analyzeMatches() {
+            const date = document.getElementById('matchDate').value;
+            const competitionId = document.getElementById('competition').value;
+            
+            if (!date) {
+                showError('Please select a date');
+                return;
+            }
+            
+            showLoading('Fetching matches for selected date...');
+            hideError();
+            hideResults();
+            
+            try {
+                // Fetch matches for the selected date
+                const response = await fetch(`/api/matches/${competitionId}/${date}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch matches');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.matches || data.matches.length === 0) {
+                    showError('No matches found for this date and competition');
+                    hideLoading();
+                    return;
+                }
+                
+                showLoading(`Found ${data.matches.length} matches. Analyzing predictions...`);
+                
+                // Analyze each match
+                const predictions = [];
+                let successCount = 0;
+                let failCount = 0;
+                
+                for (let i = 0; i < data.matches.length; i++) {
+                    const match = data.matches[i];
+                    showLoading(`Analyzing match ${i + 1}/${data.matches.length}: ${match.homeTeam.name} vs ${match.awayTeam.name}...`);
+                    
+                    try {
+                        const prediction = await analyzeSingleMatch(match);
+                        successCount++;
+                        
+                        // Filter: Only include if win chance >= 60% AND confidence >= 80%
+                        if (prediction.winChance >= 60 && prediction.confidence >= 80) {
+                            predictions.push(prediction);
+                        }
+                    } catch (error) {
+                        failCount++;
+                        console.error(`Failed to analyze match: ${match.homeTeam.name} vs ${match.awayTeam.name}`, error);
+                        // Continue with next match instead of stopping
+                    }
+                    
+                    // Small delay to respect rate limits
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+                
+                console.log(`Analysis complete: ${successCount} successful, ${failCount} failed`);
+                
+                hideLoading();
+                
+                if (predictions.length === 0) {
+                    showError('No high-confidence predictions found (60%+ win chance, 80%+ confidence)');
+                } else {
+                    displayResults(predictions, data.competition?.name || 'Competition');
+                }
+                
+            } catch (error) {
+                hideLoading();
+                showError(`Analysis failed: ${error.message}`);
+            }
+        }
+        
+        async function analyzeSingleMatch(match) {
+            // Get team stats for both teams
+            const [homeStats, awayStats] = await Promise.all([
+                getTeamStats(match.homeTeam.id),
+                getTeamStats(match.awayTeam.id)
+            ]);
+            
+            // Use server-side prediction API for consistency
+            const response = await fetch('/api/predict/match', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    homeStats,
+                    awayStats,
+                    homeTeamName: match.homeTeam.name,
+                    awayTeamName: match.awayTeam.name
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Prediction failed');
+            }
+            
+            const prediction = await response.json();
+            
+            return {
+                homeTeam: match.homeTeam.name,
+                awayTeam: match.awayTeam.name,
+                kickOff: new Date(match.utcDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                winner: prediction.winner,
+                winChance: prediction.winChance,
+                confidence: prediction.confidence
+            };
+        }
+        
+        async function getTeamStats(teamId) {
+            const response = await fetch(`/api/teams/${teamId}`);
+            const teamData = await response.json();
+            
+            const currentSeason = new Date().getFullYear();
+            const matchesResponse = await fetch(`/api/teams/${teamId}/matches?season=${currentSeason}`);
+            const matchData = await matchesResponse.json();
+            
+            const stats = calculateStatsFromMatches(matchData.matches || [], teamId);
+            return parseTeamStats(teamData, stats);
+        }
+        
+        function calculateStatsFromMatches(matches, teamId) {
+            let stats = {
+                played: 0,
+                won: 0,
+                drawn: 0,
+                lost: 0,
+                goalsFor: 0,
+                goalsAgainst: 0,
+                form: []
+            };
+            
+            const finishedMatches = matches
+                .filter(m => m.status === 'FINISHED' && m.score?.fullTime)
+                .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+            
+            finishedMatches.forEach(match => {
+                stats.played++;
+                const isHome = match.homeTeam.id === teamId;
+                const homeGoals = match.score.fullTime.home;
+                const awayGoals = match.score.fullTime.away;
+                
+                if (isHome) {
+                    stats.goalsFor += homeGoals;
+                    stats.goalsAgainst += awayGoals;
+                    if (homeGoals > awayGoals) { stats.won++; stats.form.push('W'); }
+                    else if (homeGoals < awayGoals) { stats.lost++; stats.form.push('L'); }
+                    else { stats.drawn++; stats.form.push('D'); }
+                } else {
+                    stats.goalsFor += awayGoals;
+                    stats.goalsAgainst += homeGoals;
+                    if (awayGoals > homeGoals) { stats.won++; stats.form.push('W'); }
+                    else if (awayGoals < homeGoals) { stats.lost++; stats.form.push('L'); }
+                    else { stats.drawn++; stats.form.push('D'); }
+                }
+            });
+            
+            stats.form = stats.form.slice(-5);
+            return stats;
+        }
+        
+        function parseTeamStats(teamData, stats) {
+            const maxPoints = stats.played * 3;
+            const earnedPoints = (stats.won * 3) + stats.drawn;
+            const strengthPercentage = maxPoints > 0 ? earnedPoints / maxPoints : 0.5;
+            
+            return {
+                played: stats.played,
+                won: stats.won,
+                drawn: stats.drawn,
+                lost: stats.lost,
+                goalsFor: stats.goalsFor,
+                goalsAgainst: stats.goalsAgainst,
+                form: stats.form.join('') || 'N/A',
+                attackStrength: stats.played > 0 ? stats.goalsFor / stats.played : 1.0,
+                defenseStrength: stats.played > 0 ? stats.goalsAgainst / stats.played : 1.0,
+                strength: strengthPercentage
+            };
+        }
+        
+        function calculatePrediction(homeTeam, awayTeam, homeStats, awayStats) {
+            const homeAdvantage = 0.08;
+            
+            const strengthDiff = homeStats.strength - awayStats.strength;
+            const formDiff = calculateFormStrength(homeStats.form) - calculateFormStrength(awayStats.form);
+            
+            let homeWinProb = 0.33 + (strengthDiff * 0.4) + (formDiff * 0.12) + homeAdvantage;
+            let awayWinProb = 0.33 + (-strengthDiff * 0.4) + (-formDiff * 0.12);
+            let drawProb = 0.34 - (Math.abs(strengthDiff) * 0.15);
+            
+            const total = homeWinProb + drawProb + awayWinProb;
+            homeWinProb /= total;
+            drawProb /= total;
+            awayWinProb /= total;
+            
+            const confidence = Math.min(0.9, 0.4 + Math.abs(strengthDiff) + 0.2) * 100;
+            
+            let winner, winChance;
+            if (homeWinProb > awayWinProb && homeWinProb > drawProb) {
+                winner = homeTeam.name;
+                winChance = homeWinProb * 100;
+            } else if (awayWinProb > homeWinProb && awayWinProb > drawProb) {
+                winner = awayTeam.name;
+                winChance = awayWinProb * 100;
+            } else {
+                winner = 'Draw';
+                winChance = drawProb * 100;
+            }
+            
+            return { winner, winChance, confidence };
+        }
+        
+        function calculateFormStrength(form) {
+            if (!form || form === 'N/A') return 0;
+            let strength = 0;
+            for (let i = 0; i < form.length; i++) {
+                if (form[i] === 'W') strength += 1;
+                else if (form[i] === 'D') strength += 0.5;
+            }
+            return strength / form.length;
+        }
+        
+        function displayResults(predictions, competitionName) {
+            const resultsDiv = document.getElementById('results');
+            
+            resultsDiv.innerHTML = `
+                <h2 style="text-align: center; margin: 30px 0 20px;">High-Confidence Predictions Found: ${predictions.length}</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">${competitionName} - Filtered: 60%+ Win Chance & 80%+ Confidence</p>
+                
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Kick-Off</th>
+                            <th>Match</th>
+                            <th>Predicted Winner</th>
+                            <th>Win Chance</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${predictions.map(p => `
+                            <tr>
+                                <td data-label="Kick-Off: ">${p.kickOff}</td>
+                                <td data-label="Match: "><strong>${p.homeTeam}</strong> vs <strong>${p.awayTeam}</strong></td>
+                                <td data-label="Predicted Winner: "><strong>${p.winner}</strong></td>
+                                <td data-label="Win Chance: " class="win-prob">${p.winChance.toFixed(1)}%</td>
+                                <td data-label="Confidence: " class="confidence">${p.confidence.toFixed(0)}%</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            resultsDiv.style.display = 'block';
+        }
+        
+        function showLoading(message) {
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.innerHTML = `<div class="loading">${message}</div>`;
+            loadingDiv.style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = `<div class="error">${message}</div>`;
+            errorDiv.style.display = 'block';
+        }
+        
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+        
+        function hideResults() {
+            document.getElementById('results').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

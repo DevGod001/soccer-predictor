@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Pick - Best VVIP Predictions | Sportzilo</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffd700;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+            text-align: center;
+        }
+        
+        .hero-section h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero-section .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+        
+        .hero-section .info {
+            font-size: 14px;
+            opacity: 0.9;
+            background: rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        /* Pick Cards */
+        .picks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .pick-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3px solid #ffd700;
+        }
+        
+        .pick-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .pick-header {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .pick-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .match-teams {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .match-date {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .pick-body {
+            padding: 25px;
+        }
+        
+        .recommendation-box {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .recommendation-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .recommendation-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e7d32;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 15px 10px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+        
+        .quality-score {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        /* Loading State */
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* No Picks State */
+        .no-picks {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .no-picks-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .no-picks h2 {
+            font-size: 28px;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+        
+        .no-picks p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Cache Info */
+        .cache-info {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .cache-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .cache-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 32px;
+            }
+            
+            .picks-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cache-info {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                ⚽ Sportzilo
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="fixtures.html">Fixtures</a>
+                <a href="results.html">Results</a>
+                <a href="tables.html">Tables</a>
+                <a href="vvip.html">VVIP</a>
+                <a href="picks.html" class="active">Our Pick</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>🏆 Our Pick of the Day</h1>
+            <p class="subtitle">
+                Curated Best VVIP Predictions with 60%+ Win Chance & 80%+ Confidence
+            </p>
+            <div class="info">
+                ✨ Automatically updated every 5 minutes | Top 3-4 Premium Picks
+            </div>
+        </div>
+        
+        <!-- Cache Info -->
+        <div id="cacheInfo" class="cache-info" style="display: none;">
+            <div class="cache-label">📊 Data Status</div>
+            <div class="cache-value" id="cacheStatus">Loading...</div>
+        </div>
+        
+        <!-- Picks Container -->
+        <div id="picksContainer">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">🔮 Curating the best picks for you...</div>
+                <p style="color: #999; font-size: 14px; margin-top: 10px;">
+                    Analyzing today's matches across multiple leagues
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px 20px 20px; margin-top: 60px;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
+                <!-- About Section -->
+                <div>
+                    <h3 style="font-size: 20px; margin-bottom: 15px; color: #ffd700;">⚽ Sportzilo</h3>
+                    <p style="font-size: 14px; line-height: 1.6; opacity: 0.9;">
+                        AI-powered sports predictions and analysis. Get data-driven insights, advanced statistics, and expert predictions for your favorite teams.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 style="font-size: 16px; margin-bottom: 15px; color: #ffd700;">Quick Links</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;"><a href="index.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">🏠 Home</a></li>
+                        <li style="margin-bottom: 10px;"><a href="fixtures.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">📅 Fixtures</a></li>
+                        <li style="margin-bottom: 10px;"><a href="results.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">📊 Results</a></li>
+                        <li style="margin-bottom: 10px;"><a href="vvip.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">⭐ VVIP</a></li>
+                        <li style="margin-bottom: 10px;"><a href="picks.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">🏆 Our Pick</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Features -->
+                <div>
+                    <h4 style="font-size: 16px; margin-bottom: 15px; color: #ffd700;">Our Pick Features</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">🎯 60%+ Win Probability</li>
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">✅ 80%+ Confidence Level</li>
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">🔄 Auto-Updated (6hrs)</li>
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">🏆 Premium Selections</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Copyright Bar -->
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
+                <p style="font-size: 14px; opacity: 0.8; margin-bottom: 5px;">
+                    © 2025 Sportzilo. All rights reserved.
+                </p>
+                <p style="font-size: 12px; opacity: 0.6;">
+                    Made with ⚽ for sports fans worldwide | Powered by AI & Real-time Data
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        async function loadCuratedPicks() {
+            try {
+                const response = await fetch('/api/picks/curated');
+                const data = await response.json();
+                
+                // Show cache info
+                const cacheInfo = document.getElementById('cacheInfo');
+                const cacheStatus = document.getElementById('cacheStatus');
+                
+                if (data.cached) {
+                    cacheStatus.textContent = `Cached • Next update: ${new Date(data.nextUpdate).toLocaleString()}`;
+                } else {
+                    cacheStatus.textContent = `Fresh • Next update: ${new Date(data.nextUpdate).toLocaleString()}`;
+                }
+                cacheInfo.style.display = 'flex';
+                
+                // Display picks
+                if (data.picks && data.picks.length > 0) {
+                    displayPicks(data.picks);
+                } else {
+                    displayNoPicks();
+                }
+                
+            } catch (error) {
+                console.error('Failed to load curated picks:', error);
+                displayError();
+            }
+        }
+        
+        function displayPicks(picks) {
+            const container = document.getElementById('picksContainer');
+            
+            const html = picks.map((pick, index) => {
+                const match = pick.match;
+                const pred = pick.prediction;
+                
+                // Safety checks for undefined values
+                if (!match || !pred || !match.homeTeam || !match.awayTeam || !match.date) {
+                    console.error('Invalid pick data:', pick);
+                    return '';
+                }
+                
+                const date = new Date(match.date);
+                const qualityScore = ((pred.winChance * pred.confidence) / 100).toFixed(1);
+                
+                return `
+                    <div class="pick-card">
+                        <div class="pick-header">
+                            <div class="pick-badge">
+                                ${match.competition}
+                            </div>
+                            <div class="match-teams">
+                                ${match.homeTeam} <span style="opacity: 0.7;">vs</span> ${match.awayTeam}
+                            </div>
+                            <div class="match-date">
+                                📅 ${date.toLocaleDateString()} at ${date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                        </div>
+                        
+                        <div class="pick-body">
+                            <div class="recommendation-box">
+                                <div class="recommendation-label">🎯 Our Recommendation</div>
+                                <div class="recommendation-value">${pred.recommendation}</div>
+                            </div>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-box">
+                                    <div class="stat-label">Home Win</div>
+                                    <div class="stat-value">${pred.homeWinProb.toFixed(1)}%</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Draw</div>
+                                    <div class="stat-value">${pred.drawProb.toFixed(1)}%</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-box">
+                                    <div class="stat-label">Away Win</div>
+                                    <div class="stat-value">${pred.awayWinProb.toFixed(1)}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                <div class="stat-box">
+                                    <div class="stat-label">Win Chance</div>
+                                    <div class="stat-value" style="color: #2e7d32;">${pred.winChance.toFixed(1)}%</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Confidence</div>
+                                    <div class="stat-value" style="color: #1976d2;">${pred.confidence.toFixed(0)}%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="quality-score">
+                                ⭐ Quality Score: ${qualityScore}/100
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = `<div class="picks-grid">${html}</div>`;
+        }
+        
+        function displayNoPicks() {
+            const container = document.getElementById('picksContainer');
+            container.innerHTML = `
+                <div class="no-picks">
+                    <div class="no-picks-icon">🤷‍♂️</div>
+                    <h2>No Picks Available Today</h2>
+                    <p>
+                        We couldn't find any matches meeting our strict VVIP standards<br>
+                        (60%+ Win Chance & 80%+ Confidence)
+                    </p>
+                    <p style="margin-top: 20px; font-size: 14px; color: #999;">
+                        Check back later or explore our <a href="vvip.html" style="color: #667eea; text-decoration: none; font-weight: 600;">VVIP Section</a> for manual analysis
+                    </p>
+                </div>
+            `;
+        }
+        
+        function displayError() {
+            const container = document.getElementById('picksContainer');
+            container.innerHTML = `
+                <div class="no-picks">
+                    <div class="no-picks-icon">❌</div>
+                    <h2>Unable to Load Picks</h2>
+                    <p>
+                        We're experiencing technical difficulties.<br>
+                        Please try again later.
+                    </p>
+                    <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 30px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Load picks on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadCuratedPicks();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade to VIP - Soccer Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.featured {
+            border: 3px solid #ffd700;
+            position: relative;
+            transform: scale(1.05);
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: #ffd700;
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .plan-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .plan-price {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .plan-duration {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .features-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .features-list li:before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .subscribe-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .payment-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .payment-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+        
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .payment-method {
+            padding: 15px 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        .bitcoin-logo {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #f7931a, #ff9800);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .comparison-table {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        table th,
+        table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .check {
+            color: #28a745;
+            font-size: 20px;
+        }
+        
+        .cross {
+            color: #dc3545;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Predictor</a>
+        
+        <div class="header">
+            <h1>⚡ Upgrade to VIP</h1>
+            <p>Unlock unlimited predictions and premium features</p>
+        </div>
+        
+        <div class="pricing-container">
+            <div class="pricing-card">
+                <div class="plan-name">Free Plan</div>
+                <div class="plan-price">$0</div>
+                <div class="plan-duration">Forever</div>
+                <ul class="features-list">
+                    <li>3 predictions per day</li>
+                    <li>Basic match analysis</li>
+                    <li>Team statistics</li>
+                    <li>Limited competitions</li>
+                </ul>
+                <button class="subscribe-btn" style="background: #6c757d;" disabled>Current Plan</button>
+            </div>
+            
+            <div class="pricing-card featured">
+                <div class="featured-badge">MOST POPULAR</div>
+                <div class="plan-name">VIP Plan</div>
+                <div class="plan-price">$15</div>
+                <div class="plan-duration">per month</div>
+                <ul class="features-list">
+                    <li>20 predictions per day</li>
+                    <li>Advanced match analysis</li>
+                    <li>Detailed team statistics</li>
+                    <li>All competitions</li>
+                    <li>Priority support</li>
+                    <li>Ad-free experience</li>
+                    <li>Match history tracking</li>
+                    <li>Custom alerts</li>
+                </ul>
+                <button class="subscribe-btn" onclick="showPayment()">Subscribe Now</button>
+            </div>
+        </div>
+        
+        <div class="comparison-table">
+            <h2 style="text-align: center; margin-bottom: 30px;">Feature Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Free</th>
+                        <th>VIP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Daily Predictions</td>
+                        <td>3</td>
+                        <td><strong>20</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Match Analysis</td>
+                        <td><span class="check">✓</span> Basic</td>
+                        <td><span class="check">✓</span> Advanced</td>
+                    </tr>
+                    <tr>
+                        <td>Team Statistics</td>
+                        <td><span class="check">✓</span></td>
+                        <td><span class="check">✓</span> Detailed</td>
+                    </tr>
+                    <tr>
+                        <td>All Competitions</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Priority Support</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Ad-Free</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Match History</td>
+                        <td><span class="cross">✗</span></td>
+                        <td><span class="check">✓</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="payment-section" id="paymentSection" style="display: none;">
+            <h2>🔐 Complete Your Purchase</h2>
+            
+            <div class="info-box">
+                <strong>📧 Email Authentication Required</strong><br>
+                Enter your email and create a 4-6 digit PIN. You'll use these credentials to access your VIP features.
+            </div>
+            
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pin">Create Your PIN (4-6 digits)</label>
+                    <input type="text" id="pin" placeholder="1234" pattern="\d{4,6}" maxlength="6" required>
+                    <small style="color: #666;">Remember this PIN - you'll need it to login</small>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <div class="bitcoin-logo">₿</div>
+                        <span>Bitcoin (BTC)</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>💡 How it works:</strong><br>
+                    1. Enter your email and create a PIN<br>
+                    2. Click "Pay with Bitcoin" below<br>
+                    3. Complete the payment through Coinbase Commerce<br>
+                    4. Once confirmed, your VIP access will be activated<br>
+                    5. Use your email and PIN to access VIP features
+                </div>
+                
+                <button type="button" class="subscribe-btn" onclick="initiateBitcoinPayment()">
+                    Pay $15 with Bitcoin
+                </button>
+                
+                <div style="text-align: center; margin-top: 20px; color: #666;">
+                    <small>Secure payment powered by Coinbase Commerce</small>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showPayment() {
+            document.getElementById('paymentSection').style.display = 'block';
+            document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function initiateBitcoinPayment() {
+            const email = document.getElementById('email').value;
+            const pin = document.getElementById('pin').value;
+            
+            if (!email || !pin) {
+                alert('Please enter your email and PIN');
+                return;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Validate PIN
+            if (!/^\d{4,6}$/.test(pin)) {
+                alert('PIN must be 4-6 digits');
+                return;
+            }
+            
+            // Store credentials temporarily
+            sessionStorage.setItem('pendingEmail', email);
+            sessionStorage.setItem('pendingPin', pin);
+            
+            // In production, this would redirect to Coinbase Commerce
+            alert(`Payment Integration:\n\nIn production, you would be redirected to Coinbase Commerce to complete your $15 Bitcoin payment.\n\nYour credentials:\nEmail: ${email}\nPIN: ${pin}\n\n⚠️ TO SET UP:\n1. Create a Coinbase Commerce account at commerce.coinbase.com\n2. Create a $15 charge\n3. Get your charge URL\n4. Replace this alert with: window.location.href = 'YOUR_COINBASE_COMMERCE_URL'`);
+            
+            // Demo: Show success message
+            setTimeout(() => {
+                if (confirm('DEMO MODE: Simulate successful payment?\n\nClick OK to simulate a successful Bitcoin payment and activate VIP access.')) {
+                    alert(`✅ Payment Successful!\n\nYour VIP subscription is now active!\n\nCredentials:\nEmail: ${email}\nPIN: ${pin}\n\nYou can now return to the main page and login with these credentials to access your VIP features (20 predictions per day).`);
+                    
+                    // In production, this would be handled by Coinbase webhook
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

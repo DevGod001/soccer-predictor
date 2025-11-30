@@ -1,0 +1,862 @@
+/* 
+ * Gen Z Mobile-First Responsive Styles for Soccer Predictor
+ * This stylesheet adds mobile responsiveness while keeping desktop intact
+ */
+
+/* ============================================
+   MOBILE STYLES (Base - Mobile First)
+   ============================================ */
+
+/* Root Variables for Gen Z Design */
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gold-gradient: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --mobile-padding: 15px;
+  --border-radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile Base Styles */
+@media (max-width: 768px) {
+  /* Body Adjustments */
+  body {
+    padding: 10px !important;
+    overflow-x: hidden;
+  }
+
+  /* ============================================
+       HEADER MOBILE
+       ============================================ */
+
+  .header {
+    padding: 20px 0 !important;
+    margin-bottom: 20px !important;
+  }
+
+  .header h1 {
+    font-size: 2rem !important;
+    line-height: 1.2;
+    margin-bottom: 8px !important;
+  }
+
+  .header p {
+    font-size: 14px !important;
+    padding: 0 10px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 15px !important;
+  }
+
+  .logo {
+    font-size: 24px !important;
+    justify-content: center;
+  }
+
+  /* Navigation - Mobile Hamburger Style */
+  .nav-links {
+    flex-direction: column;
+    gap: 10px !important;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: var(--border-radius);
+  }
+
+  .nav-links a {
+    padding: 10px;
+    text-align: center;
+    display: block;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+
+  .nav-links a:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ============================================
+       CONTAINER & PANELS
+       ============================================ */
+
+  .container {
+    padding: 0 10px !important;
+    max-width: 100% !important;
+  }
+
+  .panel {
+    padding: 20px 15px !important;
+    border-radius: var(--border-radius) !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* ============================================
+       HERO PREDICTOR - INDEX PAGE
+       ============================================ */
+
+  .hero-predictor {
+    padding: 30px 20px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hero-predictor h1 {
+    font-size: 28px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero-predictor .subtitle {
+    font-size: 14px !important;
+    margin-bottom: 25px !important;
+  }
+
+  /* Predictor Form - Stack Vertically */
+  .predictor-form {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    max-width: 100% !important;
+  }
+
+  .predictor-form input {
+    padding: 14px 16px !important;
+    font-size: 15px !important;
+  }
+
+  .predictor-form .vs-divider {
+    font-size: 20px !important;
+    padding: 8px 0;
+    text-align: center;
+  }
+
+  .predict-btn {
+    padding: 14px 30px !important;
+    font-size: 16px !important;
+    width: 100%;
+  }
+
+  /* ============================================
+       CONTENT GRID - INDEX PAGE
+       ============================================ */
+
+  .content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+
+  /* ============================================
+       SECTION HEADERS
+       ============================================ */
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 10px;
+    margin-bottom: 15px !important;
+  }
+
+  .section-header h2 {
+    font-size: 20px !important;
+  }
+
+  .view-all {
+    font-size: 14px !important;
+  }
+
+  /* ============================================
+       CARDS
+       ============================================ */
+
+  .card {
+    padding: 15px !important;
+    border-radius: 12px !important;
+  }
+
+  /* ============================================
+       FIXTURES - MOBILE OPTIMIZED
+       ============================================ */
+
+  .fixture-item {
+    padding: 15px 10px !important;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #fafafa;
+  }
+
+  .fixture-main {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    text-align: center;
+  }
+
+  .team-home,
+  .team-away {
+    text-align: center !important;
+    font-size: 14px !important;
+  }
+
+  .fixture-time {
+    font-size: 12px !important;
+    margin-top: 5px;
+  }
+
+  .vs {
+    margin: 8px auto !important;
+    display: inline-block;
+  }
+
+  .fixture-actions {
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: 12px;
+  }
+
+  .action-btn {
+    width: 100% !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+
+  /* ============================================
+       PREDICTION RESULTS
+       ============================================ */
+
+  .prediction-result {
+    padding: 12px !important;
+    margin-top: 12px !important;
+  }
+
+  .prediction-stats {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    font-size: 12px !important;
+  }
+
+  .stat-item {
+    padding: 8px 4px;
+  }
+
+  .stat-label {
+    font-size: 10px !important;
+  }
+
+  .stat-value {
+    font-size: 14px !important;
+  }
+
+  /* Home page prediction result (from analyzeFromHomePage function) */
+  #home-prediction-result {
+    margin: 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  #home-prediction-result > div {
+    padding: 20px 15px !important;
+    border-radius: 12px !important;
+  }
+
+  #home-prediction-result h2 {
+    font-size: 22px !important;
+    margin-bottom: 20px !important;
+  }
+
+  #home-prediction-result > div > div:first-child {
+    margin-bottom: 25px !important;
+  }
+
+  #home-prediction-result > div > div:first-child > div:first-child {
+    font-size: 18px !important;
+    margin-bottom: 12px !important;
+  }
+
+  #home-prediction-result > div > div:first-child > div:nth-child(2) {
+    font-size: 16px !important;
+  }
+
+  #home-prediction-result > div > div:last-child {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #home-prediction-result > div > div:last-child > div {
+    padding: 15px 12px !important;
+  }
+
+  #home-prediction-result > div > div:last-child > div > div:first-child {
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+  }
+
+  #home-prediction-result > div > div:last-child > div > div:last-child {
+    font-size: 24px !important;
+  }
+
+  /* ============================================
+       RESULTS - MOBILE TABLE
+       ============================================ */
+
+  .result-item {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 12px !important;
+    text-align: center;
+  }
+
+  .result-score {
+    margin: 8px auto;
+    width: fit-content;
+  }
+
+  /* ============================================
+       TABLES - MOBILE OPTIMIZED
+       ============================================ */
+
+  .table-mini {
+    font-size: 12px !important;
+  }
+
+  .table-mini td {
+    padding: 8px 4px !important;
+  }
+
+  /* Special handling for fixtures table on mobile */
+  .fixtures-table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+
+  .fixtures-table thead {
+    display: none !important;
+  }
+
+  .fixtures-table tbody {
+    display: block !important;
+  }
+
+  .fixtures-table tr {
+    display: block !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    background: white !important;
+  }
+
+  .fixtures-table td {
+    display: block !important;
+    text-align: left !important;
+    padding: 8px 0 !important;
+    border: none !important;
+  }
+
+  .fixtures-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+    color: #667eea;
+  }
+
+  /* Ensure buttons stack properly in fixtures */
+  .fixtures-table .btn-analyze,
+  .fixtures-table .btn-vvip {
+    display: block !important;
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 12px !important;
+  }
+
+  /* VVIP Results Table - Card Style on Mobile */
+  #results .results-table {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  #results .results-table thead {
+    display: none !important;
+  }
+
+  #results .results-table tbody {
+    display: block !important;
+  }
+
+  #results .results-table tr {
+    display: block !important;
+    margin-bottom: 15px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    background: white !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  #results .results-table td {
+    display: block !important;
+    text-align: left !important;
+    padding: 8px 0 !important;
+    border: none !important;
+    font-size: 14px !important;
+  }
+
+  #results .results-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+    color: #ffa500;
+    font-size: 12px;
+  }
+
+  #results h2 {
+    font-size: 20px !important;
+  }
+
+  #results p {
+    font-size: 13px !important;
+  }
+
+  /* Regular results and standings tables */
+  .results-table:not(#results .results-table),
+  .standings-table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+
+  .results-table:not(#results .results-table) thead,
+  .standings-table thead {
+    display: table !important;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .results-table:not(#results .results-table) tbody,
+  .standings-table tbody {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap;
+  }
+
+  .results-table:not(#results .results-table) tr,
+  .standings-table tr {
+    display: table !important;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .results-table:not(#results .results-table) th,
+  .results-table:not(#results .results-table) td,
+  .standings-table th,
+  .standings-table td {
+    padding: 10px 6px !important;
+    font-size: 12px !important;
+  }
+
+  /* Standings Table Specific */
+  .standings-table td:nth-child(2),
+  .standings-table th:nth-child(2) {
+    min-width: 150px !important;
+  }
+
+  .team-name {
+    font-size: 12px !important;
+    gap: 6px !important;
+  }
+
+  .team-crest {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .position {
+    font-size: 14px !important;
+  }
+
+  /* ============================================
+       CONTROLS & FORMS
+       ============================================ */
+
+  .controls {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .form-group {
+    margin-bottom: 15px !important;
+  }
+
+  .form-group label {
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 10px !important;
+    font-size: 14px !important;
+  }
+
+  .btn {
+    width: 100% !important;
+    padding: 12px 20px !important;
+    font-size: 15px !important;
+  }
+
+  .btn-analyze,
+  .btn-vvip {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 10px 16px !important;
+  }
+
+  /* ============================================
+       AD SPACES - MOBILE
+       ============================================ */
+
+  .ad-space {
+    padding: 25px 15px !important;
+    min-height: 80px !important;
+    margin: 15px 0 !important;
+  }
+
+  .ad-space.sidebar {
+    min-height: 300px !important;
+  }
+
+  .ad-content h3 {
+    font-size: 18px !important;
+  }
+
+  .ad-content p {
+    font-size: 12px !important;
+  }
+
+  /* Soccer Field Animation - Simplified for Mobile */
+  .soccer-field {
+    opacity: 0.8;
+  }
+
+  .player {
+    width: 20px !important;
+    height: 28px !important;
+  }
+
+  .score-display {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    top: 10px !important;
+  }
+
+  .score-number {
+    font-size: 16px !important;
+  }
+
+  .goal-text {
+    font-size: 50px !important;
+  }
+
+  /* ============================================
+       BACK BUTTON
+       ============================================ */
+
+  .back-btn {
+    display: inline-block !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    margin-bottom: 15px !important;
+  }
+
+  /* ============================================
+       FOOTER - MOBILE
+       ============================================ */
+
+  footer {
+    padding: 30px 15px 15px !important;
+    margin-top: 40px !important;
+  }
+
+  footer > div > div {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  footer h3 {
+    font-size: 18px !important;
+  }
+
+  footer h4 {
+    font-size: 16px !important;
+  }
+
+  footer p,
+  footer li {
+    font-size: 13px !important;
+  }
+
+  /* ============================================
+       LEGEND - MOBILE
+       ============================================ */
+
+  .legend {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 12px !important;
+  }
+
+  .legend-item {
+    font-size: 12px !important;
+  }
+
+  /* ============================================
+       LOADING & ERROR STATES
+       ============================================ */
+
+  .loading {
+    padding: 25px 15px !important;
+    font-size: 15px !important;
+  }
+
+  .error {
+    padding: 12px !important;
+    font-size: 13px !important;
+  }
+
+  /* ============================================
+       STATUS BADGES
+       ============================================ */
+
+  .status-badge {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+  }
+
+  /* ============================================
+       VVIP FAIL MESSAGE
+       ============================================ */
+
+  .vvip-fail {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* ============================================
+       AUTOCOMPLETE DROPDOWN
+       ============================================ */
+
+  .autocomplete-dropdown {
+    max-height: 200px !important;
+    font-size: 14px;
+  }
+
+  .autocomplete-item {
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+  }
+
+  /* ============================================
+       TOUCH IMPROVEMENTS
+       ============================================ */
+
+  /* Larger touch targets */
+  button,
+  a,
+  .action-btn,
+  .btn {
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent text size adjustment */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ============================================
+       ANIMATIONS - MOBILE OPTIMIZED
+       ============================================ */
+
+  /* Reduce motion for mobile performance */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Simplify complex animations on mobile */
+  .floating-ball,
+  .trophy-spin,
+  .stats-pulse,
+  .sparkle-big,
+  .pulse-ring {
+    display: none !important;
+  }
+
+  /* ============================================
+       GEN Z ENHANCEMENTS
+       ============================================ */
+
+  /* Glassmorphism effect */
+  .card,
+  .panel {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+  }
+
+  /* Smooth transitions */
+  button,
+  .btn,
+  .action-btn {
+    transition: var(--transition) !important;
+  }
+
+  /* Active state feedback */
+  button:active,
+  .btn:active,
+  .action-btn:active {
+    transform: scale(0.97) !important;
+  }
+
+  /* Modern shadow elevation */
+  .card:hover,
+  .panel:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+/* ============================================
+   TABLET STYLES (768px - 968px)
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 968px) {
+  .container {
+    padding: 0 30px !important;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .predictor-form {
+    grid-template-columns: 1fr auto 1fr auto !important;
+    max-width: 100% !important;
+  }
+
+  .controls {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .hero-predictor h1 {
+    font-size: 36px !important;
+  }
+
+  .header h1 {
+    font-size: 2.5rem !important;
+  }
+}
+
+/* ============================================
+   DESKTOP PRESERVATION (> 968px)
+   ============================================ */
+
+@media (min-width: 969px) {
+  /* All desktop styles remain intact - no overrides needed */
+  /* Original styles will apply */
+}
+
+/* ============================================
+   SMALL MOBILE (< 375px)
+   ============================================ */
+
+@media (max-width: 374px) {
+  .hero-predictor h1 {
+    font-size: 24px !important;
+  }
+
+  .header h1 {
+    font-size: 1.75rem !important;
+  }
+
+  .fixtures-table th,
+  .fixtures-table td,
+  .results-table th,
+  .results-table td,
+  .standings-table th,
+  .standings-table td {
+    padding: 8px 4px !important;
+    font-size: 11px !important;
+  }
+
+  .prediction-stats {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ============================================
+   LANDSCAPE MOBILE
+   ============================================ */
+
+@media (max-width: 896px) and (orientation: landscape) {
+  .header {
+    margin-bottom: 15px !important;
+  }
+
+  .hero-predictor {
+    padding: 20px !important;
+  }
+
+  .ad-space.sidebar {
+    min-height: 200px !important;
+  }
+}
+
+/* ============================================
+   PWA / STANDALONE MODE
+   ============================================ */
+
+@media (display-mode: standalone) {
+  body {
+    padding-top: 20px !important;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .nav-links,
+  .back-btn,
+  .controls,
+  .ad-space,
+  footer,
+  .action-btn,
+  .btn {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+}

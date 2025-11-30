@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportzilo - AI-Powered Sports Predictions & Analysis</title>
+    <link rel="stylesheet" href="mobile-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Predictor Section */
+        .hero-predictor {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .hero-predictor h1 {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .hero-predictor .subtitle {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        
+        .predictor-form {
+            display: grid;
+            grid-template-columns: 2fr auto 2fr auto;
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        
+        .predictor-form {
+            position: relative;
+        }
+        
+        .predictor-form input {
+            padding: 18px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .autocomplete-dropdown.active {
+            display: block;
+        }
+        
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .autocomplete-item:hover {
+            background: #f0f0f0;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .predictor-form .vs-divider {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .predict-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .predict-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1a1a2e;
+        }
+        
+        .section-header h2 {
+            font-size: 24px;
+            color: #1a1a2e;
+        }
+        
+        .view-all {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Grid Layout */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Fixtures Section */
+        .fixture-item {
+            padding: 20px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        
+        .fixture-item:hover {
+            background: #f9f9f9;
+        }
+        
+        .fixture-item:last-child {
+            border-bottom: none;
+        }
+        
+        .fixture-main {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .fixture-time {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .team-home, .team-away {
+            font-weight: 600;
+            font-size: 15px;
+        }
+        
+        .team-home {
+            text-align: right;
+        }
+        
+        .vs {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .fixture-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .analyze-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .analyze-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+        
+        .vvip-btn {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .vvip-btn:hover {
+            background: #e0a800;
+            transform: translateY(-1px);
+        }
+        
+        /* Prediction Results */
+        .prediction-result {
+            margin-top: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .prediction-result .winner {
+            font-weight: bold;
+            color: #2e7d32;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .prediction-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .vvip-fail {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #856404;
+        }
+        
+        /* Results Section */
+        .result-item {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-score {
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 60px;
+        }
+        
+        .winner {
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .loser {
+            color: #999;
+        }
+        
+        /* League Table */
+        .table-mini {
+            width: 100%;
+        }
+        
+        .table-mini tr {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .table-mini td {
+            padding: 10px 8px;
+        }
+        
+        .table-mini .pos {
+            font-weight: bold;
+            color: #667eea;
+            width: 40px;
+        }
+        
+        .table-mini .team {
+            font-weight: 600;
+        }
+        
+        .table-mini .pts {
+            font-weight: bold;
+            text-align: right;
+        }
+        
+        /* Ad Space */
+        .ad-space {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ad-space.sidebar {
+            min-height: 600px;
+            flex-direction: column;
+        }
+        
+        /* Soccer Field Scene */
+        .soccer-field {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #1f4d0a 0px,
+                    #2d5016 10px,
+                    #1f4d0a 20px
+                ),
+                linear-gradient(180deg, #2d5016 0%, #1a3d0a 100%);
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+        }
+        
+        .field-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        .center-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.5);
+            box-shadow: 0 0 5px rgba(255,255,255,0.3);
+        }
+        
+        /* Penalty Box Lines */
+        .penalty-box-top, .penalty-box-bottom {
+            position: absolute;
+            width: 120px;
+            height: 80px;
+            border: 3px solid rgba(255,255,255,0.4);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .penalty-box-top {
+            top: 10px;
+            border-bottom: none;
+        }
+        
+        .penalty-box-bottom {
+            bottom: 10px;
+            border-top: none;
+        }
+        
+        /* Stadium Crowd */
+        .crowd {
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.6) 0%, transparent 100%);
+            display: flex;
+            gap: 2px;
+            padding: 5px;
+        }
+        
+        .crowd-person {
+            width: 8px;
+            height: 35px;
+            background: linear-gradient(180deg, #ffd700, #ff6b6b, #4ecdc4);
+            border-radius: 2px 2px 0 0;
+            opacity: 0.7;
+            animation: crowdWave 3s ease-in-out infinite;
+        }
+        
+        .crowd-person:nth-child(2) { animation-delay: 0.1s; }
+        .crowd-person:nth-child(3) { animation-delay: 0.2s; }
+        .crowd-person:nth-child(4) { animation-delay: 0.3s; }
+        .crowd-person:nth-child(5) { animation-delay: 0.4s; }
+        .crowd-person:nth-child(6) { animation-delay: 0.5s; }
+        
+        @keyframes crowdWave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.3); }
+        }
+        
+        /* Score Display */
+        .score-display {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            padding: 8px 20px;
+            border-radius: 8px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 10;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        
+        .score-team {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .score-blue {
+            color: #4a9eff;
+        }
+        
+        .score-red {
+            color: #ff4757;
+        }
+        
+        .score-number {
+            font-size: 20px;
+            color: white;
+        }
+        
+        .score-vs {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        /* Players */
+        .player {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            border-radius: 50% 50% 40% 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .player-head {
+            width: 8px;
+            height: 8px;
+            background: #ffdbac;
+            border-radius: 50%;
+            margin-bottom: 2px;
+        }
+        
+        .player-body {
+            width: 14px;
+            height: 16px;
+            border-radius: 3px 3px 8px 8px;
+        }
+        
+        .player-legs {
+            width: 12px;
+            height: 10px;
+            display: flex;
+            gap: 4px;
+            margin-top: -2px;
+        }
+        
+        .leg {
+            width: 4px;
+            height: 10px;
+            background: #333;
+            border-radius: 2px;
+        }
+        
+        /* Team Blue */
+        .team-blue .player-body {
+            background: #0051ba;
+        }
+        
+        /* Team Red */
+        .team-red .player-body {
+            background: #e31d24;
+        }
+        
+        /* Player Animations */
+        .player1 {
+            top: 20%;
+            left: 20%;
+            animation: player1Move 8s ease-in-out infinite;
+        }
+        
+        .player2 {
+            top: 40%;
+            left: 70%;
+            animation: player2Move 6s ease-in-out infinite;
+        }
+        
+        .player3 {
+            top: 60%;
+            left: 30%;
+            animation: player3Move 7s ease-in-out infinite;
+        }
+        
+        .player4 {
+            top: 30%;
+            left: 50%;
+            animation: player4Move 9s ease-in-out infinite;
+        }
+        
+        .player5 {
+            top: 70%;
+            left: 60%;
+            animation: player5Move 5s ease-in-out infinite;
+        }
+        
+        @keyframes player1Move {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -20px); }
+        }
+        
+        @keyframes player2Move {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-25px, 15px); }
+        }
+        
+        @keyframes player3Move {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -30px); }
+        }
+        
+        @keyframes player4Move {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, 20px); }
+        }
+        
+        @keyframes player5Move {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(15px, -25px); }
+        }
+        
+        /* Animated Soccer Ball */
+        .game-ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 45%;
+            left: 45%;
+            animation: ballMove 4s ease-in-out infinite;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+        }
+        
+        .game-ball::before {
+            content: '⚽';
+            font-size: 20px;
+            position: absolute;
+            animation: ballSpin 2s linear infinite;
+        }
+        
+        @keyframes ballMove {
+            0%, 15% { 
+                transform: translate(0, 0) scale(1);
+            }
+            35% {
+                transform: translate(60px, -100px) scale(1.2);
+            }
+            55% {
+                transform: translate(120px, -180px) scale(1.4);
+            }
+            70% {
+                transform: translate(160px, -240px) scale(1.2);
+            }
+            85%, 100% {
+                transform: translate(180px, -280px) scale(0.8);
+                opacity: 0.2;
+            }
+        }
+        
+        /* Score Update Animation */
+        .score-number {
+            font-size: 20px;
+            color: white;
+            animation: scoreUpdate 4s ease-out infinite;
+        }
+        
+        @keyframes scoreUpdate {
+            0%, 85% {
+                transform: scale(1);
+            }
+            88% {
+                transform: scale(1.4);
+                color: #ffd700;
+            }
+            92% {
+                transform: scale(1);
+                color: white;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes ballSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(720deg); }
+        }
+        
+        /* GOAL Celebration */
+        .goal-text {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 80px;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 
+                0 0 20px #ff0000,
+                0 0 40px #ff0000,
+                0 0 60px #ff0000,
+                4px 4px 0 #000,
+                -4px -4px 0 #000,
+                4px -4px 0 #000,
+                -4px 4px 0 #000;
+            z-index: 100;
+            animation: goalExplosion 4s ease-out infinite;
+            letter-spacing: 5px;
+        }
+        
+        @keyframes goalExplosion {
+            0%, 85% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            88% {
+                transform: translate(-50%, -50%) scale(1.5) rotate(5deg);
+                opacity: 1;
+            }
+            92% {
+                transform: translate(-50%, -50%) scale(2) rotate(-5deg);
+                opacity: 1;
+            }
+            96% {
+                transform: translate(-50%, -50%) scale(1.8) rotate(3deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2.2) rotate(0deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Net Ripple Effect */
+        .net-ripple {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.6);
+            border-radius: 5px;
+            animation: netShake 4s ease-out infinite;
+        }
+        
+        @keyframes netShake {
+            0%, 70% {
+                transform: translate(0, 0);
+                opacity: 0.3;
+            }
+            73% {
+                transform: translate(5px, -3px);
+                opacity: 1;
+            }
+            76% {
+                transform: translate(-5px, 3px);
+                opacity: 1;
+            }
+            79% {
+                transform: translate(3px, -2px);
+                opacity: 1;
+            }
+            82% {
+                transform: translate(-3px, 2px);
+                opacity: 0.8;
+            }
+            85%, 100% {
+                transform: translate(0, 0);
+                opacity: 0.3;
+            }
+        }
+        
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            animation: confettiFall 4s ease-out infinite;
+        }
+        
+        .confetti:nth-child(1) { left: 10%; background: #ff0000; animation-delay: 3.4s; }
+        .confetti:nth-child(2) { left: 20%; background: #00ff00; animation-delay: 3.5s; }
+        .confetti:nth-child(3) { left: 30%; background: #0000ff; animation-delay: 3.4s; }
+        .confetti:nth-child(4) { left: 40%; background: #ff00ff; animation-delay: 3.6s; }
+        .confetti:nth-child(5) { left: 50%; background: #ffff00; animation-delay: 3.5s; }
+        .confetti:nth-child(6) { left: 60%; background: #00ffff; animation-delay: 3.4s; }
+        .confetti:nth-child(7) { left: 70%; background: #ff6b6b; animation-delay: 3.6s; }
+        .confetti:nth-child(8) { left: 80%; background: #ffd700; animation-delay: 3.5s; }
+        .confetti:nth-child(9) { left: 90%; background: #ff4757; animation-delay: 3.4s; }
+        
+        @keyframes confettiFall {
+            0%, 85% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+            88% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(300px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Firework Burst */
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            opacity: 0;
+            animation: fireworkBurst 4s ease-out infinite;
+        }
+        
+        .firework:nth-child(1) { animation-delay: 3.5s; }
+        .firework:nth-child(2) { animation-delay: 3.5s; }
+        .firework:nth-child(3) { animation-delay: 3.5s; }
+        .firework:nth-child(4) { animation-delay: 3.5s; }
+        .firework:nth-child(5) { animation-delay: 3.5s; }
+        
+        @keyframes fireworkBurst {
+            0%, 85% {
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+            88% {
+                opacity: 1;
+                transform: translate(var(--tx), var(--ty)) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2)) scale(0);
+            }
+        }
+        
+        /* Crowd Celebration */
+        @keyframes crowdWave {
+            0%, 100% { 
+                transform: scaleY(1); 
+                background: linear-gradient(180deg, #ffd700, #ff6b6b, #4ecdc4);
+            }
+            50% { 
+                transform: scaleY(1.3); 
+            }
+            75%, 95% {
+                transform: scaleY(1.8);
+                background: linear-gradient(180deg, #ff0000, #ffd700, #00ff00);
+            }
+        }
+        
+        /* Goal Posts */
+        .goal-left, .goal-right {
+            position: absolute;
+            width: 50px;
+            height: 40px;
+            border: 3px solid rgba(255,255,255,0.4);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .goal-left {
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%) perspective(100px) rotateY(10deg);
+            border-right: none;
+        }
+        
+        .goal-right {
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%) perspective(100px) rotateY(-10deg);
+            border-left: none;
+        }
+        
+        .ad-content {
+            z-index: 1;
+            position: relative;
+        }
+        
+        .ad-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .ad-content p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Goal Animation */
+        .goal-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        
+        .goal-post {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 60px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .goal-net {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255,255,255,0.1) 0px,
+                transparent 2px,
+                transparent 10px,
+                rgba(255,255,255,0.1) 12px
+            );
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s ease-in-out infinite;
+        }
+        
+        .sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 40%; right: 20%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { bottom: 30%; left: 25%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { top: 60%; right: 15%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: 30%; left: 40%; animation-delay: 2s; }
+        
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+        
+        /* Stadium Lights Effect */
+        .stadium-lights {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: lights 4s ease-in-out infinite;
+        }
+        
+        @keyframes lights {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        
+        /* Banner Animations - Subtle */
+        .floating-ball {
+            position: absolute;
+            font-size: 20px;
+            animation: floatBallSubtle 6s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes floatBallSubtle {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .trophy-spin {
+            position: absolute;
+            font-size: 22px;
+            animation: trophyGlow 4s ease-in-out infinite;
+            opacity: 0.4;
+        }
+        
+        @keyframes trophyGlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .stats-pulse {
+            position: absolute;
+            font-size: 20px;
+            animation: statsFade 5s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes statsFade {
+            0%, 100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+        
+        .sparkle-big {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleSubtle 4s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        
+        .sparkle-big:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+        .sparkle-big:nth-child(2) { top: 25%; left: 45%; animation-delay: 0.5s; }
+        .sparkle-big:nth-child(3) { top: 15%; right: 20%; animation-delay: 1s; }
+        .sparkle-big:nth-child(4) { top: 25%; right: 45%; animation-delay: 1.5s; }
+        .sparkle-big:nth-child(5) { bottom: 20%; left: 30%; animation-delay: 2s; }
+        .sparkle-big:nth-child(6) { bottom: 20%; right: 30%; animation-delay: 2.5s; }
+        .sparkle-big:nth-child(7) { top: 50%; left: 10%; animation-delay: 3s; }
+        .sparkle-big:nth-child(8) { top: 50%; right: 10%; animation-delay: 3.5s; }
+        
+        @keyframes sparkleSubtle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(1.2);
+            }
+        }
+        
+        .pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            animation: pulseRingSubtle 6s ease-out infinite;
+        }
+        
+        @keyframes pulseRingSubtle {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            padding: 20px;
+        }
+        
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .predictor-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .predictor-form .vs-divider {
+                text-align: center;
+            }
+            
+            .hero-predictor h1 {
+                font-size: 32px;
+            }
+            
+            .fixture-actions {
+                flex-wrap: wrap;
+            }
+            
+            .prediction-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                ⚽ Sportzilo
+            </div>
+            <div class="nav-links">
+                <a href="#fixtures">Fixtures</a>
+                <a href="#results">Results</a>
+                <a href="tables.html">Tables</a>
+                <a href="vvip.html">VVIP</a>
+                <a href="picks.html">Our Pick</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Hero AI Analyzer Section -->
+        <div class="hero-predictor">
+            <h1>⚽ AI Match Analyzer</h1>
+            <p class="subtitle">Get instant AI-powered analysis for any matchup</p>
+            <div class="predictor-form">
+                <div class="input-wrapper">
+                    <input type="text" id="homeTeam" placeholder="Home Team (e.g., Arsenal)" autocomplete="off">
+                    <div id="homeTeamDropdown" class="autocomplete-dropdown"></div>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="input-wrapper">
+                    <input type="text" id="awayTeam" placeholder="Away Team (e.g., Liverpool)" autocomplete="off">
+                    <div id="awayTeamDropdown" class="autocomplete-dropdown"></div>
+                </div>
+                <button class="predict-btn" onclick="analyzeFromHomePage()">
+                    Analyze →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Ad Space Top -->
+        <div class="ad-space">
+            <div class="stadium-lights"></div>
+            
+            <!-- Floating Soccer Balls -->
+            <div class="floating-ball" style="left: 10%; animation-delay: 0s;">⚽</div>
+            <div class="floating-ball" style="left: 25%; animation-delay: 1s;">⚽</div>
+            <div class="floating-ball" style="left: 75%; animation-delay: 0.5s;">⚽</div>
+            <div class="floating-ball" style="left: 90%; animation-delay: 1.5s;">⚽</div>
+            
+            <!-- Animated Trophies -->
+            <div class="trophy-spin" style="left: 5%; top: 30%;">🏆</div>
+            <div class="trophy-spin" style="right: 5%; top: 30%;">🏆</div>
+            
+            <!-- Stats Counter Animation -->
+            <div class="stats-pulse" style="left: 15%; top: 20%;">📊</div>
+            <div class="stats-pulse" style="right: 15%; top: 20%;">📈</div>
+            
+            <!-- Enhanced Sparkles -->
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            <div class="sparkle-big"></div>
+            
+            <!-- Pulsing Rings -->
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring" style="animation-delay: 1s;"></div>
+            
+            <div class="ad-content">
+                <h3 style="font-size: 28px; text-shadow: 0 0 20px rgba(255,255,255,0.5);">
+                    🎯 Premium Match Analysis
+                </h3>
+                <p style="font-size: 16px; margin-top: 10px;">
+                    Data-driven insights • Advanced Statistics • Live Updates
+                </p>
+            </div>
+        </div>
+        
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column - Fixtures -->
+            <div>
+                <div class="section-header" id="fixtures">
+                    <h2>🗓️ Upcoming Fixtures</h2>
+                    <a href="fixtures.html" class="view-all">View All →</a>
+                </div>
+                <div class="card">
+                    <div id="fixturesContent">
+                        <div class="loading">Loading fixtures...</div>
+                    </div>
+                </div>
+                
+                <!-- Results Section -->
+                <div class="section-header" id="results" style="margin-top: 30px;">
+                    <h2>📊 Recent Results</h2>
+                    <a href="results.html" class="view-all">View All →</a>
+                </div>
+                <div class="card">
+                    <div id="resultsContent">
+                        <div class="loading">Loading results...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - League Table & Ads -->
+            <div>
+                <div class="section-header">
+                    <h2>📋 Premier League</h2>
+                    <a href="tables.html" class="view-all">Full Table →</a>
+                </div>
+                <div class="card">
+                    <div id="tableContent">
+                        <div class="loading">Loading table...</div>
+                    </div>
+                </div>
+                
+                <!-- Ad Space Sidebar -->
+                <div class="ad-space sidebar" style="margin-top: 20px;">
+                    <div class="soccer-field">
+                        <!-- Stadium Crowd -->
+                        <div class="crowd">
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                            <div class="crowd-person"></div>
+                        </div>
+                        
+                        <!-- Score Display -->
+                        <div class="score-display">
+                            <div class="score-team">
+                                <span class="score-blue">BLUE</span>
+                                <span class="score-number" id="blueScore"></span>
+                            </div>
+                            <span class="score-vs">-</span>
+                            <div class="score-team">
+                                <span class="score-number">1</span>
+                                <span class="score-red">RED</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Field Lines -->
+                        <div class="field-lines">
+                            <div class="center-circle"></div>
+                            <div class="center-line"></div>
+                            <div class="penalty-box-top"></div>
+                            <div class="penalty-box-bottom"></div>
+                        </div>
+                        
+                        <!-- Goal Posts -->
+                        <div class="goal-left"></div>
+                        <div class="goal-right"></div>
+                        
+                        <!-- Team Blue Players -->
+                        <div class="player team-blue player1">
+                            <div class="player-head"></div>
+                            <div class="player-body"></div>
+                            <div class="player-legs">
+                                <div class="leg"></div>
+                                <div class="leg"></div>
+                            </div>
+                        </div>
+                        <div class="player team-blue player3">
+                            <div class="player-head"></div>
+                            <div class="player-body"></div>
+                            <div class="player-legs">
+                                <div class="leg"></div>
+                                <div class="leg"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Red Players -->
+                        <div class="player team-red player2">
+                            <div class="player-head"></div>
+                            <div class="player-body"></div>
+                            <div class="player-legs">
+                                <div class="leg"></div>
+                                <div class="leg"></div>
+                            </div>
+                        </div>
+                        <div class="player team-red player4">
+                            <div class="player-head"></div>
+                            <div class="player-body"></div>
+                            <div class="player-legs">
+                                <div class="leg"></div>
+                                <div class="leg"></div>
+                            </div>
+                        </div>
+                        <div class="player team-red player5">
+                            <div class="player-head"></div>
+                            <div class="player-body"></div>
+                            <div class="player-legs">
+                                <div class="leg"></div>
+                                <div class="leg"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Soccer Ball -->
+                        <div class="game-ball"></div>
+                        
+                        <!-- GOAL Celebration Text -->
+                        <div class="goal-text">GOAL!!!</div>
+                        
+                        <!-- Net Ripple -->
+                        <div class="net-ripple"></div>
+                        
+                        <!-- Confetti -->
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        <div class="confetti"></div>
+                        
+                        <!-- Fireworks -->
+                        <div class="firework" style="--tx: -40px; --ty: -40px; top: 40%; left: 50%;"></div>
+                        <div class="firework" style="--tx: 40px; --ty: -40px; top: 40%; left: 50%;"></div>
+                        <div class="firework" style="--tx: -40px; --ty: 40px; top: 40%; left: 50%;"></div>
+                        <div class="firework" style="--tx: 40px; --ty: 40px; top: 40%; left: 50%;"></div>
+                        <div class="firework" style="--tx: 0px; --ty: -50px; top: 40%; left: 50%;"></div>
+                    </div>
+                    <div class="ad-content" style="margin-top: 20px;">
+                        <h3>🏆 GOAL! Blue 2-1 Red</h3>
+                        <p style="font-size: 12px; opacity: 0.8;">⚡ Epic Celebration!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Footer -->
+    <footer style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 40px 20px 20px; margin-top: 60px;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px;">
+                <!-- About Section -->
+                <div>
+                    <h3 style="font-size: 20px; margin-bottom: 15px; color: #ffd700;">⚽ Sportzilo</h3>
+                    <p style="font-size: 14px; line-height: 1.6; opacity: 0.9;">
+                        AI-powered sports predictions and analysis. Get data-driven insights, advanced statistics, and expert predictions for your favorite teams across multiple sports.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 style="font-size: 16px; margin-bottom: 15px; color: #ffd700;">Quick Links</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;"><a href="fixtures.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">📅 Fixtures</a></li>
+                        <li style="margin-bottom: 10px;"><a href="results.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">📊 Results</a></li>
+                        <li style="margin-bottom: 10px;"><a href="tables.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">📋 Tables</a></li>
+                        <li style="margin-bottom: 10px;"><a href="vvip.html" style="color: white; text-decoration: none; opacity: 0.9; font-size: 14px;">⭐ VVIP Predictions</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Features -->
+                <div>
+                    <h4 style="font-size: 16px; margin-bottom: 15px; color: #ffd700;">Features</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">🤖 AI Match Analysis</li>
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">📈 Live Statistics</li>
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">🎯 Win Predictions</li>
+                        <li style="margin-bottom: 10px; font-size: 14px; opacity: 0.9;">⚡ Real-time Updates</li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 style="font-size: 16px; margin-bottom: 15px; color: #ffd700;">Stay Updated</h4>
+                    <p style="font-size: 14px; opacity: 0.9; margin-bottom: 15px;">Get the latest predictions and analysis</p>
+                    <div style="display: flex; gap: 15px; font-size: 24px;">
+                        <a href="#" style="color: white; opacity: 0.8; transition: opacity 0.3s;">⚽</a>
+                        <a href="#" style="color: white; opacity: 0.8; transition: opacity 0.3s;">📊</a>
+                        <a href="#" style="color: white; opacity: 0.8; transition: opacity 0.3s;">🏆</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright Bar -->
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center;">
+                <p style="font-size: 14px; opacity: 0.8; margin-bottom: 5px;">
+                    © 2025 Sportzilo. All rights reserved.
+                </p>
+                <p style="font-size: 12px; opacity: 0.6;">
+                    Made with ⚽ for sports fans worldwide | Powered by AI & Real-time Data
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Cache for predictions to avoid duplicate API calls
+        const predictionCache = new Map();
+        
+        // Rate limiting
+        let lastAPICall = 0;
+        const API_CALL_DELAY = 400; // 400ms between calls to respect rate limits
+        
+        // Load fixtures (next 3 days, Premier League)
+        async function loadFixtures() {
+            try {
+                const today = new Date();
+                const threeDays = new Date(today);
+                threeDays.setDate(threeDays.getDate() + 3);
+                
+                const dateFrom = today.toISOString().split('T')[0];
+                const dateTo = threeDays.toISOString().split('T')[0];
+                
+                const response = await fetch(`/api/matches/range?competitionId=2021&dateFrom=${dateFrom}&dateTo=${dateTo}`);
+                const data = await response.json();
+                
+                if (data.matches && data.matches.length > 0) {
+                    const fixtures = data.matches.slice(0, 5);
+                    displayFixtures(fixtures);
+                } else {
+                    document.getElementById('fixturesContent').innerHTML = '<p style="text-align: center; color: #999;">No upcoming fixtures</p>';
+                }
+            } catch (error) {
+                document.getElementById('fixturesContent').innerHTML = '<p style="text-align: center; color: #999;">Unable to load fixtures</p>';
+            }
+        }
+        
+        function displayFixtures(matches) {
+            const html = matches.map((match, index) => {
+                const date = new Date(match.utcDate);
+                const time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const day = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                
+                return `
+                    <div class="fixture-item" id="fixture-${index}">
+                        <div class="fixture-main">
+                            <div class="team-home">${match.homeTeam.name}</div>
+                            <div>
+                                <div class="vs">VS</div>
+                                <div class="fixture-time">${day}<br>${time}</div>
+                            </div>
+                            <div class="team-away">${match.awayTeam.name}</div>
+                        </div>
+                        <div class="fixture-actions">
+                            <button class="action-btn analyze-btn" onclick="analyzeMatch(${index}, ${match.homeTeam.id}, ${match.awayTeam.id}, '${match.homeTeam.name.replace(/'/g, "\\'")}', '${match.awayTeam.name.replace(/'/g, "\\'")}')">
+                                📊 Analyze
+                            </button>
+                            <button class="action-btn vvip-btn" onclick="checkVVIPStatus(${index}, ${match.homeTeam.id}, ${match.awayTeam.id}, '${match.homeTeam.name.replace(/'/g, "\\'")}', '${match.awayTeam.name.replace(/'/g, "\\'")}')">
+                                ⭐ VVIP Check
+                            </button>
+                        </div>
+                        <div id="result-${index}"></div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('fixturesContent').innerHTML = html;
+        }
+        
+        async function enforceRateLimit() {
+            const now = Date.now();
+            const timeSinceLastCall = now - lastAPICall;
+            
+            if (timeSinceLastCall < API_CALL_DELAY) {
+                const waitTime = API_CALL_DELAY - timeSinceLastCall;
+                await new Promise(resolve => setTimeout(resolve, waitTime));
+            }
+            
+            lastAPICall = Date.now();
+        }
+        
+        async function analyzeMatch(index, homeTeamId, awayTeamId, homeTeamName, awayTeamName) {
+            const resultDiv = document.getElementById(`result-${index}`);
+            const cacheKey = `${homeTeamId}-${awayTeamId}`;
+            
+            // Check cache first
+            if (predictionCache.has(cacheKey)) {
+                const prediction = predictionCache.get(cacheKey);
+                displayPrediction(resultDiv, prediction);
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div style="padding: 10px; color: #667eea;">Analyzing...</div>';
+            
+            try {
+                // Rate limit: wait if needed
+                await enforceRateLimit();
+                
+                // Get team stats with delays
+                const homeStats = await getTeamStats(homeTeamId);
+                await enforceRateLimit(); // Delay between calls
+                const awayStats = await getTeamStats(awayTeamId);
+                
+                // Calculate prediction
+                const prediction = await calculatePrediction(
+                    { name: homeTeamName }, 
+                    { name: awayTeamName }, 
+                    homeStats, 
+                    awayStats
+                );
+                
+                // Store in cache
+                predictionCache.set(cacheKey, prediction);
+                
+                // Display result
+                displayPrediction(resultDiv, prediction);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="padding: 10px; color: #c62828;">Failed to analyze: ${error.message}</div>`;
+            }
+        }
+        
+        async function checkVVIPStatus(index, homeTeamId, awayTeamId, homeTeamName, awayTeamName) {
+            const resultDiv = document.getElementById(`result-${index}`);
+            const cacheKey = `${homeTeamId}-${awayTeamId}`;
+            
+            let prediction;
+            
+            // Check cache first
+            if (predictionCache.has(cacheKey)) {
+                prediction = predictionCache.get(cacheKey);
+            } else {
+                resultDiv.innerHTML = '<div style="padding: 10px; color: #ffa500;">⭐ Checking VVIP standards...</div>';
+                
+                try {
+                    // Rate limit: wait if needed
+                    await enforceRateLimit();
+                    
+                    // Get team stats with delays
+                    const homeStats = await getTeamStats(homeTeamId);
+                    await enforceRateLimit(); // Delay between calls
+                    const awayStats = await getTeamStats(awayTeamId);
+                    
+                    // Calculate prediction
+                    prediction = await calculatePrediction(
+                        { name: homeTeamName }, 
+                        { name: awayTeamName }, 
+                        homeStats, 
+                        awayStats
+                    );
+                    
+                    // Store in cache
+                    predictionCache.set(cacheKey, prediction);
+                    
+                } catch (error) {
+                    resultDiv.innerHTML = `<div style="padding: 10px; color: #c62828;">Failed to check: ${error.message}</div>`;
+                    return;
+                }
+            }
+            
+            try {
+                // VVIP Standards: 60%+ win chance AND 80%+ confidence
+                const meetsVVIPStandards = prediction.winChance >= 60 && prediction.confidence >= 80;
+                
+                if (meetsVVIPStandards) {
+                    // Display full prediction if it meets VVIP standards
+                    displayPrediction(resultDiv, prediction);
+                } else {
+                    // Show why it doesn't meet standards
+                    resultDiv.innerHTML = `
+                        <div class="vvip-fail">
+                            ❌ <strong>Does Not Meet VVIP Standards</strong><br>
+                            <div style="margin-top: 8px; font-size: 12px;">
+                                Win Chance: ${(prediction.winChance || 0).toFixed(1)}% ${prediction.winChance < 60 ? '(needs 60%+)' : '✓'}<br>
+                                Confidence: ${(prediction.confidence || 0).toFixed(0)}% ${prediction.confidence < 80 ? '(needs 80%+)' : '✓'}
+                            </div>
+                            <div style="margin-top: 8px; font-size: 11px; opacity: 0.8;">
+                                Use "📊 Analyze" button to see full prediction
+                            </div>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="padding: 10px; color: #c62828;">Failed to check: ${error.message}</div>`;
+            }
+        }
+        
+        async function getTeamStats(teamId) {
+            await enforceRateLimit();
+            const response = await fetch(`/api/teams/${teamId}`);
+            const teamData = await response.json();
+            
+            const currentSeason = new Date().getFullYear();
+            await enforceRateLimit();
+            const matchesResponse = await fetch(`/api/teams/${teamId}/matches?season=${currentSeason}`);
+            const matchData = await matchesResponse.json();
+            
+            const stats = calculateStatsFromMatches(matchData.matches || [], teamId);
+            return parseTeamStats(teamData, stats);
+        }
+        
+        function calculateStatsFromMatches(matches, teamId) {
+            let stats = {
+                played: 0, won: 0, drawn: 0, lost: 0,
+                goalsFor: 0, goalsAgainst: 0, form: []
+            };
+            
+            const finishedMatches = matches
+                .filter(m => m.status === 'FINISHED' && m.score?.fullTime)
+                .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+            
+            finishedMatches.forEach(match => {
+                stats.played++;
+                const isHome = match.homeTeam.id === teamId;
+                const homeGoals = match.score.fullTime.home;
+                const awayGoals = match.score.fullTime.away;
+                
+                if (isHome) {
+                    stats.goalsFor += homeGoals;
+                    stats.goalsAgainst += awayGoals;
+                    if (homeGoals > awayGoals) { stats.won++; stats.form.push('W'); }
+                    else if (homeGoals < awayGoals) { stats.lost++; stats.form.push('L'); }
+                    else { stats.drawn++; stats.form.push('D'); }
+                } else {
+                    stats.goalsFor += awayGoals;
+                    stats.goalsAgainst += homeGoals;
+                    if (awayGoals > homeGoals) { stats.won++; stats.form.push('W'); }
+                    else if (awayGoals < homeGoals) { stats.lost++; stats.form.push('L'); }
+                    else { stats.drawn++; stats.form.push('D'); }
+                }
+            });
+            
+            stats.form = stats.form.slice(-5);
+            return stats;
+        }
+        
+        function parseTeamStats(teamData, stats) {
+            const maxPoints = stats.played * 3;
+            const earnedPoints = (stats.won * 3) + stats.drawn;
+            const strengthPercentage = maxPoints > 0 ? earnedPoints / maxPoints : 0.5;
+            
+            return {
+                played: stats.played, won: stats.won, drawn: stats.drawn, lost: stats.lost,
+                goalsFor: stats.goalsFor, goalsAgainst: stats.goalsAgainst,
+                form: stats.form.join('') || 'N/A',
+                attackStrength: stats.played > 0 ? stats.goalsFor / stats.played : 1.0,
+                defenseStrength: stats.played > 0 ? stats.goalsAgainst / stats.played : 1.0,
+                strength: strengthPercentage
+            };
+        }
+        
+        async function calculatePrediction(homeTeam, awayTeam, homeStats, awayStats) {
+            const response = await fetch('/api/predict/match', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    homeStats,
+                    awayStats,
+                    homeTeamName: homeTeam.name,
+                    awayTeamName: awayTeam.name
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Prediction failed');
+            }
+            
+            return await response.json();
+        }
+        
+        function displayPrediction(container, prediction) {
+            container.innerHTML = `
+                <div class="prediction-result">
+                    <div class="winner">🎯 ${prediction.recommendation || 'Analysis Complete'}</div>
+                    <div class="prediction-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Home Win</div>
+                            <div class="stat-value">${(prediction.homeWinProb || 0).toFixed(1)}%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Draw</div>
+                            <div class="stat-value">${(prediction.drawProb || 0).toFixed(1)}%</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Away Win</div>
+                            <div class="stat-value">${(prediction.awayWinProb || 0).toFixed(1)}%</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; text-align: center; font-size: 12px; color: #666;">
+                        Confidence: ${(prediction.confidence || 0).toFixed(0)}%
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Load recent results
+        async function loadResults() {
+            try {
+                const today = new Date();
+                const weekAgo = new Date(today);
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                
+                const dateFrom = weekAgo.toISOString().split('T')[0];
+                const dateTo = today.toISOString().split('T')[0];
+                
+                const response = await fetch(`/api/matches/range?competitionId=2021&dateFrom=${dateFrom}&dateTo=${dateTo}`);
+                const data = await response.json();
+                
+                if (data.matches) {
+                    const finishedMatches = data.matches
+                        .filter(m => m.status === 'FINISHED' && m.score?.fullTime)
+                        .slice(0, 5);
+                    
+                    if (finishedMatches.length > 0) {
+                        displayResults(finishedMatches);
+                    } else {
+                        document.getElementById('resultsContent').innerHTML = '<p style="text-align: center; color: #999;">No recent results</p>';
+                    }
+                } else {
+                    document.getElementById('resultsContent').innerHTML = '<p style="text-align: center; color: #999;">No recent results</p>';
+                }
+            } catch (error) {
+                document.getElementById('resultsContent').innerHTML = '<p style="text-align: center; color: #999;">Unable to load results</p>';
+            }
+        }
+        
+        function displayResults(matches) {
+            const html = matches.map(match => {
+                const homeGoals = match.score.fullTime.home;
+                const awayGoals = match.score.fullTime.away;
+                const homeClass = homeGoals > awayGoals ? 'winner' : homeGoals < awayGoals ? 'loser' : '';
+                const awayClass = awayGoals > homeGoals ? 'winner' : awayGoals < homeGoals ? 'loser' : '';
+                
+                return `
+                    <div class="result-item">
+                        <div class="team-home ${homeClass}">${match.homeTeam.name}</div>
+                        <div class="result-score">${homeGoals} - ${awayGoals}</div>
+                        <div class="team-away ${awayClass}">${match.awayTeam.name}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('resultsContent').innerHTML = html;
+        }
+        
+        // Load league table (top 5)
+        async function loadTable() {
+            try {
+                const response = await fetch('/api/competitions/2021/standings');
+                const data = await response.json();
+                
+                if (data.standings && data.standings[0]) {
+                    const topTeams = data.standings[0].table.slice(0, 5);
+                    displayTable(topTeams);
+                } else {
+                    document.getElementById('tableContent').innerHTML = '<p style="text-align: center; color: #999;">Unable to load table</p>';
+                }
+            } catch (error) {
+                document.getElementById('tableContent').innerHTML = '<p style="text-align: center; color: #999;">Unable to load table</p>';
+            }
+        }
+        
+        function displayTable(teams) {
+            const html = `
+                <table class="table-mini">
+                    ${teams.map(team => `
+                        <tr>
+                            <td class="pos">${team.position}</td>
+                            <td class="team">${team.team.name}</td>
+                            <td class="pts">${team.points} pts</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
+            
+            document.getElementById('tableContent').innerHTML = html;
+        }
+        
+        // Animate score for goal celebration
+        function animateScore() {
+            const blueScore = document.getElementById('blueScore');
+            
+            function updateScore() {
+                blueScore.textContent = '2';
+                
+                // Change score when goal happens (at 3.5s mark in 4s cycle)
+                setTimeout(() => {
+                    blueScore.textContent = '3';
+                }, 3500);
+            }
+            
+            // Initial update
+            updateScore();
+            
+            // Loop every 4 seconds
+            setInterval(updateScore, 4000);
+        }
+        
+        // Analyze from home page
+        async function analyzeFromHomePage() {
+            const homeTeamName = document.getElementById('homeTeam').value.trim();
+            const awayTeamName = document.getElementById('awayTeam').value.trim();
+            
+            if (!homeTeamName || !awayTeamName) {
+                alert('Please enter both home and away team names');
+                return;
+            }
+            
+            // Find team IDs
+            const homeTeam = allTeams.find(t => t.name.toLowerCase() === homeTeamName.toLowerCase());
+            const awayTeam = allTeams.find(t => t.name.toLowerCase() === awayTeamName.toLowerCase());
+            
+            if (!homeTeam || !awayTeam) {
+                alert('Please select valid team names from the dropdown');
+                return;
+            }
+            
+            // Scroll to show loading message
+            const resultContainer = document.createElement('div');
+            resultContainer.id = 'home-prediction-result';
+            resultContainer.style.marginTop = '30px';
+            resultContainer.innerHTML = '<div style="text-align: center; padding: 30px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);"><div style="color: #667eea; font-size: 18px; font-weight: 600;">🔮 Analyzing match...</div></div>';
+            
+            const predictor = document.querySelector('.hero-predictor');
+            const existing = document.getElementById('home-prediction-result');
+            if (existing) existing.remove();
+            predictor.after(resultContainer);
+            
+            try {
+                // Get team stats
+                await enforceRateLimit();
+                const homeStats = await getTeamStats(homeTeam.id);
+                await enforceRateLimit();
+                const awayStats = await getTeamStats(awayTeam.id);
+                
+                // Calculate prediction
+                const prediction = await calculatePrediction(
+                    { name: homeTeamName },
+                    { name: awayTeamName },
+                    homeStats,
+                    awayStats
+                );
+                
+                // Display prediction
+                resultContainer.innerHTML = `
+                    <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        <h2 style="text-align: center; color: #1a1a2e; font-size: 28px; margin-bottom: 30px;">
+                            ⚽ Match Prediction
+                        </h2>
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <div style="font-size: 24px; font-weight: 700; color: #2e7d32; margin-bottom: 15px;">
+                                ${prediction.recommendation || 'Analysis Complete'}
+                            </div>
+                            <div style="font-size: 18px; color: #666; margin-bottom: 10px;">
+                                ${homeTeamName} <span style="color: #667eea;">VS</span> ${awayTeamName}
+                            </div>
+                            <div style="font-size: 14px; color: #999;">
+                                Confidence: ${(prediction.confidence || 0).toFixed(0)}%
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 600px; margin: 0 auto;">
+                            <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 12px;">
+                                <div style="font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px;">Home Win</div>
+                                <div style="font-size: 28px; font-weight: bold; color: #2e7d32;">${(prediction.homeWinProb || 0).toFixed(1)}%</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-radius: 12px;">
+                                <div style="font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px;">Draw</div>
+                                <div style="font-size: 28px; font-weight: bold; color: #f57c00;">${(prediction.drawProb || 0).toFixed(1)}%</div>
+                            </div>
+                            <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #fce4ec, #f8bbd0); border-radius: 12px;">
+                                <div style="font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px;">Away Win</div>
+                                <div style="font-size: 28px; font-weight: bold; color: #c2185b;">${(prediction.awayWinProb || 0).toFixed(1)}%</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+            } catch (error) {
+                resultContainer.innerHTML = `
+                    <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;">
+                        <div style="color: #c62828; font-size: 18px; font-weight: 600;">❌ Analysis Failed</div>
+                        <div style="color: #666; margin-top: 10px;">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Team autocomplete
+        let allTeams = [];
+        
+        async function loadTeams() {
+            try {
+                const response = await fetch('/api/competitions/2021/teams');
+                const data = await response.json();
+                if (data.teams) {
+                    allTeams = data.teams.map(t => ({ id: t.id, name: t.name }));
+                }
+            } catch (error) {
+                console.error('Failed to load teams:', error);
+            }
+        }
+        
+        function setupAutocomplete(inputId, dropdownId) {
+            const input = document.getElementById(inputId);
+            const dropdown = document.getElementById(dropdownId);
+            
+            input.addEventListener('input', function() {
+                const value = this.value.toLowerCase().trim();
+                
+                if (value.length < 2) {
+                    dropdown.classList.remove('active');
+                    return;
+                }
+                
+                const filtered = allTeams.filter(team => 
+                    team.name.toLowerCase().includes(value)
+                ).slice(0, 8);
+                
+                if (filtered.length > 0) {
+                    dropdown.innerHTML = filtered.map(team => 
+                        `<div class="autocomplete-item" data-name="${team.name}">${team.name}</div>`
+                    ).join('');
+                    dropdown.classList.add('active');
+                    
+                    dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+                        item.addEventListener('click', function() {
+                            input.value = this.dataset.name;
+                            dropdown.classList.remove('active');
+                        });
+                    });
+                } else {
+                    dropdown.classList.remove('active');
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
+        }
+        
+        // Load all content on page load with delays between API calls
+        window.addEventListener('DOMContentLoaded', async () => {
+            animateScore();
+            await loadTeams();
+            setupAutocomplete('homeTeam', 'homeTeamDropdown');
+            setupAutocomplete('awayTeam', 'awayTeamDropdown');
+            await loadFixtures();
+            await new Promise(resolve => setTimeout(resolve, 600));
+            await loadResults();
+            await new Promise(resolve => setTimeout(resolve, 600));
+            await loadTable();
+        });
+    </script>
+</body>
+</html>
