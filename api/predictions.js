@@ -256,10 +256,22 @@ export default async function handler(req, res) {
       return res.status(401).json({ success: false, error: 'Missing authorization' });
     }
     
-    // Get upcoming matches from Football-Data API
-    const matches = await fetchFootballData(`/matches?status=SCHEDULED&competitions=${COMPETITIONS.join(',')}`);
+    // Get upcoming matches from all competitions
+    let allMatches = [];
     
-    if (!matches.matches || matches.matches.length === 0) {
+    // Fetch matches from each competition individually
+    for (const competitionCode of COMPETITIONS) {
+      try {
+        const competitionMatches = await fetchFootballData(`/competitions/${competitionCode}/matches?status=SCHEDULED`);
+        if (competitionMatches.matches && competitionMatches.matches.length > 0) {
+          allMatches = allMatches.concat(competitionMatches.matches);
+        }
+      } catch (error) {
+        console.warn(`Warning: Could not fetch matches for ${competitionCode}:`, error.message);
+      }
+    }
+    
+    if (allMatches.length === 0) {
       return res.status(200).json({
         success: true,
         predictions: [],
@@ -270,7 +282,7 @@ export default async function handler(req, res) {
     
     // Calculate predictions for all matches
     const predictions = [];
-    for (const match of matches.matches.slice(0, 10)) { // Limit to 10 matches
+    for (const match of allMatches.slice(0, 10)) { // Limit to 10 matches
       const prediction = await calculatePrediction(match);
       if (prediction) {
         predictions.push({
