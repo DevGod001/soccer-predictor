@@ -1468,9 +1468,9 @@
                 const allFixturesArrays = await Promise.all(fixturePromises);
                 const allFixtures = allFixturesArrays.flat();
                 
-                // Filter to only upcoming matches (SCHEDULED, TIMED, not FINISHED or IN_PLAY)
+                // Filter to upcoming and live matches (SCHEDULED, TIMED, IN_PLAY - exclude only FINISHED)
                 const upcomingMatches = allFixtures.filter(match => 
-                    match.status === 'SCHEDULED' || match.status === 'TIMED'
+                    match.status === 'SCHEDULED' || match.status === 'TIMED' || match.status === 'IN_PLAY'
                 );
                 
                 // Sort by date (earliest first)
