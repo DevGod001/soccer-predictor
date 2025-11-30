@@ -1444,21 +1444,40 @@
         let lastAPICall = 0;
         const API_CALL_DELAY = 400; // 400ms between calls to respect rate limits
         
-        // Load fixtures (next 3 days, Premier League)
+        // Load upcoming fixtures from all leagues
         async function loadFixtures() {
             try {
                 const today = new Date();
-                const threeDays = new Date(today);
-                threeDays.setDate(threeDays.getDate() + 3);
+                const sevenDays = new Date(today);
+                sevenDays.setDate(sevenDays.getDate() + 7);
                 
                 const dateFrom = today.toISOString().split('T')[0];
-                const dateTo = threeDays.toISOString().split('T')[0];
+                const dateTo = sevenDays.toISOString().split('T')[0];
                 
-                const response = await fetch(`/api/matches/range?competitionId=2021&dateFrom=${dateFrom}&dateTo=${dateTo}`);
-                const data = await response.json();
+                // Competition IDs for major leagues
+                const competitions = [2021, 2014, 2019, 2002, 2015, 2001]; // PL, La Liga, Serie A, Bundesliga, Ligue 1, Champions League
                 
-                if (data.matches && data.matches.length > 0) {
-                    const fixtures = data.matches.slice(0, 5);
+                // Fetch fixtures from all competitions
+                const fixturePromises = competitions.map(compId =>
+                    fetch(`/api/matches/range?competitionId=${compId}&dateFrom=${dateFrom}&dateTo=${dateTo}`)
+                        .then(res => res.json())
+                        .then(data => data.matches || [])
+                        .catch(() => [])
+                );
+                
+                const allFixturesArrays = await Promise.all(fixturePromises);
+                const allFixtures = allFixturesArrays.flat();
+                
+                // Filter to only upcoming matches (SCHEDULED, TIMED, not FINISHED or IN_PLAY)
+                const upcomingMatches = allFixtures.filter(match => 
+                    match.status === 'SCHEDULED' || match.status === 'TIMED'
+                );
+                
+                // Sort by date (earliest first)
+                upcomingMatches.sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+                
+                if (upcomingMatches.length > 0) {
+                    const fixtures = upcomingMatches.slice(0, 5);
                     displayFixtures(fixtures);
                 } else {
                     document.getElementById('fixturesContent').innerHTML = '<p style="text-align: center; color: #999;">No upcoming fixtures</p>';
