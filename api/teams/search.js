@@ -1,7 +1,10 @@
-import { kv } from '@vercel/kv';
-
 const FOOTBALL_API_BASE = 'https://api.football-data.org/v4';
-const COMPETITIONS = ['PL', 'SA', 'IT', 'BL1', 'FL1']; // Premier League, La Liga, Serie A, Bundesliga, Ligue 1
+const COMPETITIONS = ['PL', 'SA', 'BL1', 'PD', 'FL1']; // Premier League, La Liga, Bundesliga, Serie A, Ligue 1
+
+// In-memory cache (will reset on serverless function cold start, which is fine for temporary caching)
+let teamsCache = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Helper: Fetch from Football-Data API
 async function fetchFootballData(endpoint) {
@@ -17,6 +20,11 @@ async function fetchFootballData(endpoint) {
 }
 
 export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
   if (req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
@@ -25,24 +33,25 @@ export default async function handler(req, res) {
     const { search = '' } = req.query;
     const searchLower = search.toLowerCase();
     
-    // Check cache first
-    const cacheKey = 'teams-all-competitions';
-    let cachedTeams = await kv.get(cacheKey);
-    let allTeams = cachedTeams ? JSON.parse(cachedTeams) : null;
+    // Check in-memory cache
+    const now = Date.now();
+    const isCacheValid = teamsCache && cacheTimestamp && (now - cacheTimestamp < CACHE_DURATION);
     
-    if (!allTeams) {
+    let allTeams = teamsCache;
+    
+    if (!isCacheValid) {
       // Fetch teams from all competitions
       allTeams = [];
       
       for (const competitionCode of COMPETITIONS) {
         try {
-          const standings = await fetchFootballData(`/competitions/${competitionCode}/standings`);
-          if (standings.standings && standings.standings[0] && standings.standings[0].table) {
-            const competitionTeams = standings.standings[0].table.map(entry => ({
-              id: entry.team.id,
-              name: entry.team.name,
+          const teams = await fetchFootballData(`/competitions/${competitionCode}/teams`);
+          if (teams.teams && Array.isArray(teams.teams)) {
+            const competitionTeams = teams.teams.map(team => ({
+              id: team.id,
+              name: team.name,
               competition: competitionCode,
-              crest: entry.team.crest || ''
+              crest: team.crest || ''
             }));
             allTeams = allTeams.concat(competitionTeams);
           }
@@ -63,12 +72,9 @@ export default async function handler(req, res) {
       // Sort by name
       allTeams.sort((a, b) => a.name.localeCompare(b.name));
       
-      // Cache for 24 hours
-      try {
-        await kv.setex(cacheKey, 86400, JSON.stringify(allTeams));
-      } catch (cacheError) {
-        console.warn('Cache error:', cacheError.message);
-      }
+      // Update in-memory cache
+      teamsCache = allTeams;
+      cacheTimestamp = now;
     }
     
     // Filter by search query
